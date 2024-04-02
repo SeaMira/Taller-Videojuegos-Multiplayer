@@ -2,7 +2,8 @@ extends CharacterBody2D
 
 @onready var multiplayer_spawner: MultiplayerSpawner = $MultiplayerSpawner
 @onready var multiplayer_synchronizer: MultiplayerSynchronizer = $MultiplayerSynchronizer
-
+@onready var animation_tree = $AnimationTree
+@onready var playback = animation_tree.get("parameters/playback")
 @export var bullet_scene: PackedScene
 
 @export var score = 1 :
@@ -20,6 +21,7 @@ func _input(event: InputEvent) -> void:
 			multiplayer_spawner.add_child(bullet, true)
 			# triggers syncronizer
 			score += 1
+			
 
 func setup(player_data: Statics.PlayerData):
 	name = str(player_data.id)
