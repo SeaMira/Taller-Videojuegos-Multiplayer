@@ -19,6 +19,7 @@ config/icon="res://icon.svg"
 
 Debug="*res://scripts/debug.gd"
 Game="*res://scenes/game.tscn"
+PuzzleSettings="*res://scenes/puzzle_settings.gd"
 
 [gui]
 
