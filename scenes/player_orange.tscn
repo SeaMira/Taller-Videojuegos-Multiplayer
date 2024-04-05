@@ -1,6 +1,7 @@
-[gd_scene load_steps=27 format=3 uid="uid://cend8m8ic1rnv"]
+[gd_scene load_steps=29 format=3 uid="uid://cend8m8ic1rnv"]
 
 [ext_resource type="Script" path="res://scenes/player_orange.gd" id="1_jrh40"]
+[ext_resource type="Script" path="res://scenes/input_synchronizer_orange.gd" id="3_7jkca"]
 [ext_resource type="Texture2D" uid="uid://cm42ieuxve1l1" path="res://assets/characters.png" id="3_wl0xc"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_rl8oa"]
@@ -23,7 +24,7 @@ tracks/0/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 1,
-"values": [52]
+"values": [80]
 }
 
 [sub_resource type="Animation" id="Animation_brxmw"]
@@ -40,7 +41,7 @@ tracks/0/keys = {
 "times": PackedFloat32Array(0, 0.2, 0.4, 0.6),
 "transitions": PackedFloat32Array(1, 1, 1, 1),
 "update": 1,
-"values": [44, 52, 60, 52]
+"values": [76, 84, 92, 84]
 }
 
 [sub_resource type="Animation" id="Animation_c7sjl"]
@@ -57,12 +58,12 @@ tracks/0/keys = {
 "times": PackedFloat32Array(0, 0.2, 0.4, 0.6),
 "transitions": PackedFloat32Array(1, 1, 1, 1),
 "update": 1,
-"values": [46, 54, 62, 54]
+"values": [78, 86, 94, 86]
 }
 
 [sub_resource type="Animation" id="Animation_e1qnu"]
 resource_name = "go_right"
-length = 0.3
+length = 0.8
 loop_mode = 1
 tracks/0/type = "value"
 tracks/0/imported = false
@@ -74,7 +75,7 @@ tracks/0/keys = {
 "times": PackedFloat32Array(0, 0.2, 0.4, 0.6),
 "transitions": PackedFloat32Array(1, 1, 1, 1),
 "update": 1,
-"values": [42, 50, 58, 50]
+"values": [74, 82, 90, 82]
 }
 
 [sub_resource type="Animation" id="Animation_sm8k4"]
@@ -92,8 +93,11 @@ tracks/0/keys = {
 "times": PackedFloat32Array(0, 0.2, 0.4, 0.6),
 "transitions": PackedFloat32Array(1, 1, 1, 1),
 "update": 1,
-"values": [40, 48, 56, 48]
+"values": [72, 80, 88, 80]
 }
+
+[sub_resource type="Animation" id="Animation_q6rxb"]
+resource_name = "go_up_orange"
 
 [sub_resource type="Animation" id="Animation_58sr6"]
 resource_name = "idle"
@@ -109,7 +113,7 @@ tracks/0/keys = {
 "times": PackedFloat32Array(0),
 "transitions": PackedFloat32Array(1),
 "update": 1,
-"values": [52]
+"values": [80]
 }
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_g0qk2"]
@@ -119,6 +123,7 @@ _data = {
 "go_left": SubResource("Animation_c7sjl"),
 "go_right": SubResource("Animation_e1qnu"),
 "go_up": SubResource("Animation_sm8k4"),
+"go_up_orange": SubResource("Animation_q6rxb"),
 "idle": SubResource("Animation_58sr6")
 }
 
@@ -173,7 +178,6 @@ graph_offset = Vector2(0, -20.1358)
 [node name="PlayerOrange" type="CharacterBody2D"]
 position = Vector2(531, 205)
 script = ExtResource("1_jrh40")
-metadata/_edit_group_ = true
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 position = Vector2(-0.5, 4.5)
@@ -184,7 +188,7 @@ texture_filter = 1
 texture = ExtResource("3_wl0xc")
 hframes = 8
 vframes = 12
-frame = 52
+frame = 80
 
 [node name="MultiplayerSpawner" type="MultiplayerSpawner" parent="."]
 _spawnable_scenes = PackedStringArray("res://scenes/bullet.tscn")
@@ -199,8 +203,12 @@ libraries = {
 }
 
 [node name="AnimationTree" type="AnimationTree" parent="."]
+active = false
 libraries = {
 "": SubResource("AnimationLibrary_g0qk2")
 }
 tree_root = SubResource("AnimationNodeStateMachine_3oiqu")
 anim_player = NodePath("../AnimationPlayer")
+
+[node name="InputSynchronizer" type="MultiplayerSynchronizer" parent="."]
+script = ExtResource("3_7jkca")

@@ -1,7 +1,11 @@
 extends CharacterBody2D
 
+const speed = 300.0
+var acceleration = 3000
+
 @onready var multiplayer_spawner: MultiplayerSpawner = $MultiplayerSpawner
 @onready var multiplayer_synchronizer: MultiplayerSynchronizer = $MultiplayerSynchronizer
+@onready var input_synchronizer: MultiplayerSynchronizer = $InputSynchronizer
 @onready var animation_tree = $AnimationTree
 @onready var playback = animation_tree.get("parameters/playback")
 @export var bullet_scene: PackedScene
@@ -11,17 +15,8 @@ extends CharacterBody2D
 		score = value
 		Debug.sprint("Player %s score %d" % [name, score])
 
-
-func _input(event: InputEvent) -> void:
-	if is_multiplayer_authority():
-		if event.is_action_pressed("test"):
-			test.rpc(Game.get_current_player().name)
-			var bullet = bullet_scene.instantiate()
-			# spawner will spawn a bullet on every simulated
-			multiplayer_spawner.add_child(bullet, true)
-			# triggers syncronizer
-			score += 1
-			
+func _ready() -> void:
+	animation_tree.active = true
 
 func setup(player_data: Statics.PlayerData):
 	name = str(player_data.id)
@@ -29,10 +24,21 @@ func setup(player_data: Statics.PlayerData):
 	multiplayer_spawner.set_multiplayer_authority(player_data.id)
 	multiplayer_synchronizer.set_multiplayer_authority(player_data.id)
 
-@rpc("authority", "call_local", "reliable")
-func test(name):
-	var message = "test " + name
-	var sender_id = multiplayer.get_remote_sender_id()
-	var sender_player = Game.get_player(sender_id)
-	Debug.sprint(message)
-	Debug.sprint(sender_player.name)
+func _physics_process(delta):
+	var move_input = input_synchronizer.move_input
+	var target_velocity = move_input * speed
+	velocity = velocity.move_toward(target_velocity, acceleration * delta)
+	move_and_slide()
+	
+	if velocity.x > 0:
+		playback.travel("go_right")
+	elif velocity.x < 0:
+		playback.travel("go_left")
+	else:
+		playback.travel("idle")
+	
+@rpc
+func send_data(pos: Vector2, vel: Vector2):
+	global_position = lerp(global_position, pos, 0.75)
+	velocity = lerp(velocity, vel, 0.75)
+	
