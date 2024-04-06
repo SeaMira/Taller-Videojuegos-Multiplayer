@@ -3,6 +3,7 @@ extends Node
 var PUZZLE_IMAGE = null
 var PUZZLE_PIECES = null
 var pieces: Array[PuzzlePieceData] = []
+var PUZZLE_SCALE = null
 
 enum Rotation {
 	UP,
@@ -14,20 +15,20 @@ enum Rotation {
 class PuzzlePieceData:
 	var idx: int
 	var idy: int
-	var sprite: Sprite2D
+	var body: RigidBody2D
 	var rotation: Rotation
 	
-	func _init(new_idx: int, new_idy: int, new_sprite: Sprite2D, new_rotation: Rotation = Rotation.UP) -> void:
+	func _init(new_idx: int, new_idy: int, new_body: RigidBody2D, new_rotation: Rotation = Rotation.UP) -> void:
 		idx = new_idx
 		idy = new_idy
-		sprite = new_sprite
+		body = new_body
 		rotation = new_rotation
 	
 	func to_dict() -> Dictionary:
 		return {
 			"idx": idx,
 			"idy": idy,
-			"sprite": sprite,
+			"body": body,
 			"rotation": rotation
 		}
 

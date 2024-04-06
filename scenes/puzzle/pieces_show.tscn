@@ -1,6 +1,21 @@
-[gd_scene load_steps=2 format=3 uid="uid://bgep6mktob6sp"]
+[gd_scene load_steps=4 format=3 uid="uid://bgep6mktob6sp"]
 
 [ext_resource type="Script" path="res://scripts/puzzle/puzzle_game.gd" id="1_yysc1"]
+[ext_resource type="Texture2D" uid="uid://tw8t38ns0seh" path="res://icon.svg" id="2_p1n2r"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_wg4xu"]
 
 [node name="PiecesShow" type="Node2D"]
 script = ExtResource("1_yysc1")
+
+[node name="RigidBody2D" type="RigidBody2D" parent="."]
+collision_layer = 0
+collision_mask = 0
+
+[node name="Sprite2D" type="Sprite2D" parent="RigidBody2D"]
+texture = ExtResource("2_p1n2r")
+region_enabled = true
+region_rect = Rect2(64, 64, 34, 22)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="RigidBody2D"]
+shape = SubResource("RectangleShape2D_wg4xu")
