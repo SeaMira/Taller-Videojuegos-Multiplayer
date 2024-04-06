@@ -6,7 +6,9 @@
 [sub_resource type="CircleShape2D" id="CircleShape2D_xkdmo"]
 radius = 64.0
 
-[node name="Bullet" type="RigidBody2D"]
+[node name="Bullet" type="CharacterBody2D"]
+position = Vector2(200, 200)
+scale = Vector2(0.1, 0.1)
 script = ExtResource("1_udq8v")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]

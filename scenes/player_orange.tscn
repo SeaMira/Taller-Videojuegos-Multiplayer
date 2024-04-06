@@ -1,6 +1,7 @@
-[gd_scene load_steps=30 format=3 uid="uid://cend8m8ic1rnv"]
+[gd_scene load_steps=31 format=3 uid="uid://cend8m8ic1rnv"]
 
 [ext_resource type="Script" path="res://scenes/player_orange.gd" id="1_jrh40"]
+[ext_resource type="PackedScene" uid="uid://dskjy6yd4quog" path="res://scenes/bullet.tscn" id="2_ih2x5"]
 [ext_resource type="Script" path="res://scenes/input_synchronizer_orange.gd" id="3_7jkca"]
 [ext_resource type="Texture2D" uid="uid://cm42ieuxve1l1" path="res://assets/characters.png" id="3_wl0xc"]
 
@@ -183,6 +184,7 @@ properties/0/replication_mode = 1
 [node name="PlayerOrange" type="CharacterBody2D"]
 position = Vector2(531, 205)
 script = ExtResource("1_jrh40")
+bullet_scene = ExtResource("2_ih2x5")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 position = Vector2(-0.5, 4.5)

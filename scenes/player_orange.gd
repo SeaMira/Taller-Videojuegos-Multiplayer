@@ -27,8 +27,13 @@ func setup(player_data: Statics.PlayerData):
 func _physics_process(delta):
 	var move_input = input_synchronizer.move_input
 	var target_velocity = move_input * speed
+	var is_bullet = input_synchronizer.is_bullet
 	velocity = velocity.move_toward(target_velocity, acceleration * delta)
 	move_and_slide()
+	
+	if is_bullet:
+		var bullet = bullet_scene.instantiate()
+		multiplayer_spawner.add_child(bullet)
 	
 	if velocity.x > 0:
 		playback.travel("go_right")
