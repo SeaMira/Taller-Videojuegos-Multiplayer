@@ -81,6 +81,7 @@ func _confirm_button_pressed():
 	PuzzleSettings.pieces.clear() # Limpiar cualquier pieza existente
 	for i in range(PUZZLE_PIECES):
 		for j in range(PUZZLE_PIECES):
+			var piece_data_body = RigidBody2D.new()
 			var piece_data = Sprite2D.new()
 			piece_data.texture = IMAGE
 			piece_data.region_enabled = true
