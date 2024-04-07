@@ -32,7 +32,12 @@ class PuzzlePieceData:
 			"rotation": rotation
 		}
 
-# Called when the node enters the scene tree for the first time.
+
+func search_piece(piece: RigidBody2D):
+	for p in pieces:
+		if p.body == piece:
+			return Vector2(p.idx, p.idy)
+
 func _ready():
 	pass # Replace with function body.
 

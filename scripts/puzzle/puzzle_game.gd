@@ -31,16 +31,33 @@ func _ready():
 			#piece_body.scale = scale_factor
 			# Configura los RigidBody2D para ser estáticos o kinemáticos según lo necesites aquí
 			# piece_body.mode = RigidBody2D.MODE_STATIC o RigidBody2D.MODE_KINEMATIC
-			#print(piece_body)
+			var v_pos = Vector2(get_viewport().size/4) - start_position 
+			piece_places_setup(i, j, piece_size.x, piece_size.y, position + v_pos)
+			
 			
 	
+func piece_places_setup(i, j, width, height, pos):
+	var area = Area2D.new()
+	var shape = CollisionShape2D.new()
+	var rect_shape = RectangleShape2D.new()
+	rect_shape.extents = Vector2(width / 2, height / 2)
+	shape.shape = rect_shape
+	area.add_child(shape)
+	#area.position = pos - Vector2(width*0.3, height*0.3) + Vector2(width*0.5, height*0.5)
+	area.position = pos - Vector2(width*0.82, height*0.82)
+	area.name = "celda_" + str(i) + "_" + str(j)
+	area.collision_layer = 2
+	area.collision_mask = 1
+	area.body_entered.connect(_on_cell_body_entered.bind(area))
+	add_child(area) # Asegúrate de que este script esté adjunto a un nodo que pueda ser padre de Area2D
 
-
-func piece_places_setup():
-	var piece_width = PuzzleSettings.PUZZLE_IMAGE.get_width()/PuzzleSettings.PUZZLE_PIECES
-	var piece_height = PuzzleSettings.PUZZLE_IMAGE.get_height()/PuzzleSettings.PUZZLE_PIECES
-	pass
 	
+	
+func _on_cell_body_entered(body, area):
+	var indxs = PuzzleSettings.search_piece(body)
+	var body_name = "celda_" + str(indxs.x) + "_" + str(indxs.y)
+	if area.name == body_name:
+		print("algo entró ", area.name)
 	
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.

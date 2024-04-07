@@ -98,7 +98,7 @@ func _confirm_button_pressed():
 	for i in range(PUZZLE_PIECES):
 		for j in range(PUZZLE_PIECES):
 			var piece_body = RigidBody2D.new()
-
+				
 			var piece_sprite = Sprite2D.new()
 			piece_sprite.texture = IMAGE
 			piece_sprite.region_enabled = true
