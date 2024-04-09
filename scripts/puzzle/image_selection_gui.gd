@@ -11,7 +11,7 @@ var image_extensions = ["png", "jpg", "jpeg"]
 var IMAGE = null
 var PUZZLE_PIECES = 16
 
-
+var status = { 1 : false }
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -126,4 +126,15 @@ func _confirm_button_pressed():
 			PuzzleSettings.pieces.append(piece)
 	get_tree().change_scene_to_file("res://scenes/puzzle/pieces_show.tscn")
 	
-	
+@rpc("reliable", "any_peer", "call_local")
+func player_ready(id: int):
+	if multiplayer.is_server():
+		status[id] = !status[id]
+		set_player_ready.rpc(id, status[id])
+		var all_ok = true
+		for ok in status.values():
+			all_ok = all_ok and ok
+		if all_ok:
+			starting_game.rpc(true)
+		else:
+			starting_game.rpc(false)
