@@ -39,6 +39,10 @@ func _physics_process(delta):
 		playback.travel("go_right")
 	elif velocity.x < 0:
 		playback.travel("go_left")
+	elif velocity.y < 0:
+		playback.travel("go_up")
+	elif velocity.y > 0:
+		playback.travel("go_down")
 	else:
 		playback.travel("idle")
 	
