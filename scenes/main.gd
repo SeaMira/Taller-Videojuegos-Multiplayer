@@ -1,6 +1,6 @@
 extends Node2D
 
-
+var puzzle_scene = preload("res://scenes/puzzle/pieces_show.tscn")
 var player_scene_blue = preload("res://scenes/player_blue.tscn")
 var player_scene_orange = preload("res://scenes/player_orange.tscn")
 #@export var player_scene: PackedScene
@@ -19,3 +19,6 @@ func _ready() -> void:
 			
 		players.add_child(player)
 		player.setup(player_data)
+	
+	var puzzle_instance = puzzle_scene.instantiate()
+	add_child(puzzle_instance)

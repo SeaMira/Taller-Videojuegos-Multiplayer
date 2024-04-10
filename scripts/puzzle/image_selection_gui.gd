@@ -135,7 +135,7 @@ func choose_random_key():
 
 @rpc("any_peer", "call_local", "reliable")
 func start_game() -> void:
-	get_tree().change_scene_to_file("res://scenes/puzzle/pieces_show.tscn")
+	get_tree().change_scene_to_file("res://scenes/main.tscn")
 	
 	
 @rpc("any_peer", "call_local", "reliable")
@@ -199,9 +199,14 @@ func setting_puzzle(image_player):
 			var text_height_ppp = texture_height/PUZZLE_PIECES
 			piece_sprite.region_rect = Rect2(i * text_width_ppp, j * text_height_ppp, text_width_ppp, text_height_ppp)
 			piece_sprite.scale = Vector2(scale_x, scale_y)
-
+			
+			var contorno_sprite = piece_sprite.duplicate()
+			contorno_sprite.modulate = Color(0, 0, 0, 1)  # Cambia el color a negro para el contorno
+			contorno_sprite.scale *= 1.05
 			
 			piece_body.add_child(piece_sprite)
+			piece_body.add_child(contorno_sprite)
+			piece_body.move_child(contorno_sprite, 0)
 			piece_sprite.set_owner(piece_body)
 			
 			var collision_shape = CollisionShape2D.new()
