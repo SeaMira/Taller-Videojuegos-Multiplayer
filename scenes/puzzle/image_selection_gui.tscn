@@ -63,6 +63,12 @@ layout_mode = 2
 text = "Empezar Juego
 "
 
+[node name="CancelButton" type="Button" parent="PanelContainer/MarginContainer/VBoxContainer"]
+visible = false
+layout_mode = 2
+text = "Cancelar
+"
+
 [node name="AcceptDialog" type="AcceptDialog" parent="PanelContainer/MarginContainer/VBoxContainer"]
 initial_position = 1
 dialog_text = "Archivo seleccionado no es una imagen!"
