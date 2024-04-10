@@ -54,10 +54,11 @@ func piece_places_setup(i, j, width, height, pos):
 	
 	
 func _on_cell_body_entered(body, area):
-	var indxs = PuzzleSettings.search_piece(body)
-	var body_name = "celda_" + str(indxs.x) + "_" + str(indxs.y)
-	if area.name == body_name:
-		print("algo entró ", area.name)
+	#var indxs = PuzzleSettings.search_piece(body)
+	#var body_name = "celda_" + str(indxs.x) + "_" + str(indxs.y)
+	#if area.name == body_name:
+		#print("algo entró ", area.name)
+	print("wena")
 	
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
