@@ -65,6 +65,9 @@ left={
 
 2d_physics/layer_1="puzzle_grid"
 2d_physics/layer_2="puzzle_pieces"
+2d_physics/layer_3="Players"
+2d_physics/layer_4="Bullet"
+2d_physics/layer_5="Walls"
 
 [rendering]
 

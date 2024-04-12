@@ -3,6 +3,7 @@ extends CharacterBody2D
 const speed = 300.0
 var acceleration = 3000
 
+@onready var player_orange = $"."
 @onready var multiplayer_spawner: MultiplayerSpawner = $MultiplayerSpawner
 @onready var multiplayer_synchronizer: MultiplayerSynchronizer = $MultiplayerSynchronizer
 @onready var input_synchronizer: MultiplayerSynchronizer = $InputSynchronizer
@@ -33,7 +34,8 @@ func _physics_process(delta):
 	
 	if is_bullet:
 		var bullet = bullet_scene.instantiate()
-		multiplayer_spawner.add_child(bullet)
+		bullet.set_position(global_position)
+		multiplayer_spawner.add_child(bullet, true)
 	
 	if velocity.x > 0:
 		playback.travel("go_right")

@@ -185,7 +185,10 @@ properties/0/spawn = true
 properties/0/replication_mode = 1
 
 [node name="PlayerOrange" type="CharacterBody2D"]
-position = Vector2(886, 422)
+position = Vector2(850, 400)
+collision_layer = 4
+collision_mask = 16
+motion_mode = 1
 script = ExtResource("1_jrh40")
 bullet_scene = ExtResource("2_ih2x5")
 
