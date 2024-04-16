@@ -26,12 +26,12 @@ func _ready():
 	cancel_button.pressed.connect(self._cancel_button_pressed)
 	
 	### option selector setting
-	option_button.add_item("16 x 16")
-	option_button.set_item_metadata(0, 16)
-	option_button.add_item("32 x 32")
-	option_button.set_item_metadata(1, 32)
-	option_button.add_item("64 x 64")
-	option_button.set_item_metadata(2, 64)
+	option_button.add_item("4 x 4")
+	option_button.set_item_metadata(0, 4)
+	option_button.add_item("5 x 5")
+	option_button.set_item_metadata(1, 25)
+	option_button.add_item("6 x 6")
+	option_button.set_item_metadata(2, 36)
 	option_button.select(0)
 	option_button.item_selected.connect(self._option_selected)
 	
@@ -152,22 +152,16 @@ func change_status(id):
 @rpc("any_peer", "call_local", "reliable")
 func setting_puzzle(image_player):
 	
-	#var image_player = choose_random_key()
+
 	var image_and_extension = images[image_player]
-	#print(image_and_extension[0])
+
 	var data = image_and_extension[0]
 	print(data.format2)
 	var image = Image.create_from_data(data.width, data.height, data.mipmaps, data.format2, data.data )
-	#if image_and_extension[1] == "jpg":
-		#image.load_jpg_from_buffer(image_and_extension[0])
-	#elif image_and_extension[1] == "png":
-		#image.load_png_from_buffer(image_and_extension[0])
-	
 		
 	var image_texture = ImageTexture.new()
 	image_texture.set_image(image)
-	#IMAGE = image_texture
-	
+
 	var viewport_size = get_viewport().size
 	var target_width = viewport_size.x * 0.6
 	var target_height = viewport_size.y * 0.6
@@ -180,46 +174,54 @@ func setting_puzzle(image_player):
 	var scale_y = target_height / texture_height
 	
 	PuzzleSettings.PUZZLE_SCALE = Vector2(scale_x, scale_y)
-	#IMAGE.set_size_override(viewport_size*0.6)
 	
 	PuzzleSettings.PUZZLE_IMAGE = image_texture
 	PuzzleSettings.PUZZLE_PIECES = PUZZLE_PIECES
 	
 	var piece_width = target_width / PUZZLE_PIECES
 	var piece_height = target_height / PUZZLE_PIECES
-	PuzzleSettings.pieces.clear() # Limpiar cualquier pieza existente
+	PuzzleSettings.orange_pieces.clear() # Limpiar cualquier pieza existente
+	PuzzleSettings.blue_pieces.clear()
 	for i in range(PUZZLE_PIECES):
 		for j in range(PUZZLE_PIECES):
-			var piece_body = RigidBody2D.new()
-				
-			var piece_sprite = Sprite2D.new()
-			piece_sprite.texture = image_texture
-			piece_sprite.region_enabled = true
-			var text_width_ppp = texture_width/PUZZLE_PIECES
-			var text_height_ppp = texture_height/PUZZLE_PIECES
-			piece_sprite.region_rect = Rect2(i * text_width_ppp, j * text_height_ppp, text_width_ppp, text_height_ppp)
-			piece_sprite.scale = Vector2(scale_x, scale_y)
+			var orange_piece_body = new_piece_body(image_texture, i, j, texture_width, texture_height, scale_x, scale_y, PUZZLE_PIECES, piece_width, piece_height)
+			var blue_piece_body = new_piece_body(image_texture, i, j, texture_width, texture_height, scale_x, scale_y, PUZZLE_PIECES, piece_width, piece_height)
 			
-			var contorno_sprite = piece_sprite.duplicate()
-			contorno_sprite.modulate = Color(0, 0, 0, 1)  # Cambia el color a negro para el contorno
-			contorno_sprite.scale *= 1.05
+			var orange_piece = PuzzleSettings.PuzzlePieceData.new(i, j, orange_piece_body)
+			PuzzleSettings.orange_pieces.append(orange_piece)
 			
-			piece_body.add_child(piece_sprite)
-			piece_body.add_child(contorno_sprite)
-			piece_body.move_child(contorno_sprite, 0)
-			piece_sprite.set_owner(piece_body)
-			
-			var collision_shape = CollisionShape2D.new()
-			var shape = RectangleShape2D.new()
-			
-			# Ajusta la extensión de la forma de colisión para que coincida con las dimensiones escaladas del sprite
-			shape.extents = Vector2(piece_width / 2, piece_height / 2) 
-			collision_shape.shape = shape
-			piece_body.gravity_scale = 0
-			piece_body.collision_layer = 1 
-			piece_body.collision_mask  = 2
-			piece_body.add_child(collision_shape)
+			var blue_piece = PuzzleSettings.PuzzlePieceData.new(i, j, blue_piece_body)
+			PuzzleSettings.blue_pieces.append(blue_piece)
 
-			var piece = PuzzleSettings.PuzzlePieceData.new(i, j, piece_body)
-			PuzzleSettings.pieces.append(piece)
-
+func new_piece_body(image_texture, i, j, texture_width, texture_height, scale_x, scale_y, PUZZLE_PIECES, piece_width, piece_height):
+	var piece_body = RigidBody2D.new()
+			
+	var piece_sprite = Sprite2D.new()
+	piece_sprite.texture = image_texture
+	piece_sprite.region_enabled = true
+	var text_width_ppp = texture_width/PUZZLE_PIECES
+	var text_height_ppp = texture_height/PUZZLE_PIECES
+	piece_sprite.region_rect = Rect2(i * text_width_ppp, j * text_height_ppp, text_width_ppp, text_height_ppp)
+	piece_sprite.scale = Vector2(scale_x, scale_y)
+	
+	var contorno_sprite = piece_sprite.duplicate()
+	contorno_sprite.modulate = Color(0, 0, 0, 1)  # Cambia el color a negro para el contorno
+	contorno_sprite.scale *= 1.05
+	
+	piece_body.add_child(piece_sprite)
+	piece_body.add_child(contorno_sprite)
+	piece_body.move_child(contorno_sprite, 0)
+	piece_sprite.set_owner(piece_body)
+	
+	var collision_shape = CollisionShape2D.new()
+	var shape = RectangleShape2D.new()
+	
+	# Ajusta la extensión de la forma de colisión para que coincida con las dimensiones escaladas del sprite
+	shape.extents = Vector2(piece_width / 2, piece_height / 2) 
+	collision_shape.shape = shape
+	piece_body.gravity_scale = 0
+	piece_body.collision_layer = 1 
+	piece_body.collision_mask  = 2
+	piece_body.add_child(collision_shape)
+	
+	return piece_body

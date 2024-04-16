@@ -23,7 +23,7 @@ func _ready():
 		for j in range(n):
 			var indx = i * n + j
 			# Accede directamente al RigidBody2D almacenado
-			var piece_body = PuzzleSettings.pieces[indx].body
+			var piece_body = PuzzleSettings.blue_pieces[indx].body
 			add_child(piece_body)
 			# Calcula la posición basándote en el tamaño de la pieza, escala, y márgenes
 			var position = start_position + Vector2(j * (piece_size.x * scale_factor.x + margin), i * (piece_size.y * scale_factor.y + margin))

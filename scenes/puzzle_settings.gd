@@ -2,7 +2,8 @@ extends Node
 
 var PUZZLE_IMAGE = null
 var PUZZLE_PIECES = null
-var pieces: Array[PuzzlePieceData] = []
+var orange_pieces: Array[PuzzlePieceData] = []
+var blue_pieces: Array[PuzzlePieceData] = []
 var PUZZLE_SCALE = null
 
 enum Rotation {
@@ -34,7 +35,7 @@ class PuzzlePieceData:
 
 
 func search_piece(piece: RigidBody2D):
-	for p in pieces:
+	for p in blue_pieces:
 		if p.body == piece:
 			return Vector2(p.idx, p.idy)
 
