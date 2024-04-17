@@ -2,8 +2,9 @@ extends CharacterBody2D
 
 const speed = 300.0
 var acceleration = 3000
+var pieces_on_area = []
+var piece_grabbed = null
 @onready var with_piece = 0
-@export var piece_entered: RigidBody2D = null
 
 @onready var player_orange = $"."
 @onready var multiplayer_spawner: MultiplayerSpawner = $MultiplayerSpawner
@@ -32,6 +33,7 @@ func _physics_process(delta):
 	var target_velocity = move_input * speed
 	var is_bullet = input_synchronizer.is_bullet
 	var grab_piece = input_synchronizer.grab_piece	
+	var free_piece = input_synchronizer.free_piece
 	velocity = velocity.move_toward(target_velocity, acceleration * delta)
 	move_and_slide()
 	
@@ -43,6 +45,10 @@ func _physics_process(delta):
 	if grab_piece and not with_piece:
 		grab_piece_action.rpc()
 		with_piece = 1
+		
+	if free_piece and with_piece:
+		free_piece_action.rpc()
+		with_piece = 0
 	
 	if velocity.x > 0:
 		playback.travel("go_right")
@@ -60,12 +66,36 @@ func send_data(pos: Vector2, vel: Vector2):
 	global_position = lerp(global_position, pos, 0.75)
 	velocity = lerp(velocity, vel, 0.75)
 
-func _on_area_2d_body_entered(body: RigidBody2D):
-	piece_entered = body
+func _on_area_2d_body_entered(body):
+	#if body.is_in_group('orange'):
+	pieces_on_area.append(body)
+	print(pieces_on_area)
 	
+func _on_area_2d_body_exited(body):
+	#if body.is_in_group('orange') and body in pieces_on_area:
+	pieces_on_area.erase(body)
+	print(pieces_on_area)
+
 @rpc("authority", "call_local")
 func grab_piece_action():
-	piece_entered.reparent(player_orange)
+	var max_z = -1000
+	var max_z_piece = null
+	for item in pieces_on_area:
+		print(item.z_index)
+		if item.z_index >= max_z:
+			max_z = item.z_index
+			max_z_piece = item
+		
+	print(max_z)
+	max_z_piece.reparent(player_orange)
+	piece_grabbed = max_z_piece
+
+@rpc("authority", "call_local")
+func free_piece_action():
+	piece_grabbed.queue_free()
+	piece_grabbed = null
 	
 		
 	
+
+

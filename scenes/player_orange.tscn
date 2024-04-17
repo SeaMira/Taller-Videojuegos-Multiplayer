@@ -184,9 +184,9 @@ properties/0/path = NodePath("InputSynchronizer:move_input")
 properties/0/spawn = true
 properties/0/replication_mode = 1
 
-[node name="PlayerOrange" type="CharacterBody2D"]
+[node name="PlayerOrange" type="CharacterBody2D" groups=["orange"]]
 z_index = 4096
-position = Vector2(850, 400)
+position = Vector2(339, 427)
 collision_layer = 4
 collision_mask = 16
 motion_mode = 1
@@ -234,3 +234,4 @@ position = Vector2(-0.5, 4.5)
 shape = SubResource("RectangleShape2D_rl8oa")
 
 [connection signal="body_entered" from="Area2D" to="." method="_on_area_2d_body_entered"]
+[connection signal="body_exited" from="Area2D" to="." method="_on_area_2d_body_exited"]
