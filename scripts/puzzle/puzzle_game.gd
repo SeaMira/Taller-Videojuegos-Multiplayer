@@ -13,6 +13,7 @@ func _ready():
 	puzzle.modulate.a = 0.3
 	add_child(puzzle)
 	
+	
 	var start_position = Vector2(50, 50) # Posición inicial de la cuadrícula
 	var margin = 0 # Margen entre piezas
 	var piece_size = get_viewport().size * (0.6/PuzzleSettings.PUZZLE_PIECES) # Asume un tamaño fijo para las piezas
@@ -21,18 +22,15 @@ func _ready():
 
 	for i in range(n):
 		for j in range(n):
-			var indx = i * n + j
-			# Accede directamente al RigidBody2D almacenado
-			var piece_body = PuzzleSettings.blue_pieces[indx].body
-			add_child(piece_body)
-			# Calcula la posición basándote en el tamaño de la pieza, escala, y márgenes
 			var position = start_position + Vector2(j * (piece_size.x * scale_factor.x + margin), i * (piece_size.y * scale_factor.y + margin))
-			piece_body.position = position
-			#piece_body.scale = scale_factor
-			# Configura los RigidBody2D para ser estáticos o kinemáticos según lo necesites aquí
-			# piece_body.mode = RigidBody2D.MODE_STATIC o RigidBody2D.MODE_KINEMATIC
 			var v_pos = Vector2(get_viewport().size/4) - start_position 
 			piece_places_setup(i, j, piece_size.x, piece_size.y, position + v_pos)
+			if multiplayer.is_server():
+				var rng = RandomNumberGenerator.new()
+				var rngx = rng.randf()
+				var rngy = rng.randf()
+				place_blue_piece.rpc(i, j, n, rngx, rngy)
+				place_orange_piece.rpc(i, j, n, rngx, rngy)
 			
 			
 	
@@ -51,7 +49,37 @@ func piece_places_setup(i, j, width, height, pos):
 	area.body_entered.connect(_on_cell_body_entered.bind(area))
 	add_child(area) # Asegúrate de que este script esté adjunto a un nodo que pueda ser padre de Area2D
 
+@rpc("any_peer", "call_local", "reliable")
+func place_blue_piece(i, j, n, rngx, rngy):
+	var indx = i * n + j
+	# Accede directamente al RigidBody2D almacenado
+	var piece_body = PuzzleSettings.blue_pieces[indx].body
+	piece_body.z_index = indx
+	add_child(piece_body)
+	piece_body.add_to_group("blue")
+	var viewport_size = get_viewport().size
+	# Calcula la posición basándote en el tamaño de la pieza, escala, y márgenes
+	var position = Vector2(viewport_size.x*(0.8 + 0.2*rngx), viewport_size.y*(0.55 + 0.45*rngy))
+	piece_body.position = position
+	#piece_body.scale = scale_factor
+	# Configura los RigidBody2D para ser estáticos o kinemáticos según lo necesites aquí
+	# piece_body.mode = RigidBody2D.MODE_STATIC o RigidBody2D.MODE_KINEMATIC
 	
+@rpc("any_peer", "call_local", "reliable")
+func place_orange_piece(i, j, n, rngx, rngy):
+	var indx = i * n + j
+	# Accede directamente al RigidBody2D almacenado
+	var piece_body = PuzzleSettings.orange_pieces[indx].body
+	piece_body.z_index = indx
+	add_child(piece_body)
+	piece_body.add_to_group("orange")
+	var viewport_size = get_viewport().size
+	# Calcula la posición basándote en el tamaño de la pieza, escala, y márgenes
+	var position = Vector2(viewport_size.x*(0.8 + 0.2*rngx), viewport_size.y*0.45*rngy)
+	piece_body.position = position
+	#piece_body.scale = scale_factor
+	# Configura los RigidBody2D para ser estáticos o kinemáticos según lo necesites aquí
+	# piece_body.mode = RigidBody2D.MODE_STATIC o RigidBody2D.MODE_KINEMATIC
 	
 func _on_cell_body_entered(body, area):
 	#var indxs = PuzzleSettings.search_piece(body)

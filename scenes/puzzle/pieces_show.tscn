@@ -7,7 +7,7 @@
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_wg4xu"]
 
-[node name="PiecesShow" type="Node2D"]
+[node name="PiecesShow" type="Node2D" groups=["blue", "orange"]]
 script = ExtResource("1_yysc1")
 
 [node name="RigidBody2D" type="RigidBody2D" parent="."]

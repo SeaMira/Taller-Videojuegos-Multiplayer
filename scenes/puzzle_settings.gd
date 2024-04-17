@@ -34,8 +34,13 @@ class PuzzlePieceData:
 		}
 
 
-func search_piece(piece: RigidBody2D):
+func search_blue_piece(piece: RigidBody2D):
 	for p in blue_pieces:
+		if p.body == piece:
+			return Vector2(p.idx, p.idy)
+			
+func search_orange_piece(piece: RigidBody2D):
+	for p in orange_pieces:
 		if p.body == piece:
 			return Vector2(p.idx, p.idy)
 

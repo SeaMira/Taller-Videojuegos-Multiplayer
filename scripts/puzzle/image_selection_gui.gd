@@ -10,7 +10,7 @@ extends MarginContainer
 
 var image_extensions = ["png", "jpg"]
 var IMAGE = null
-var PUZZLE_PIECES = 16
+var PUZZLE_PIECES = 4
 
 var status = {  }
 var images = {}
@@ -29,9 +29,9 @@ func _ready():
 	option_button.add_item("4 x 4")
 	option_button.set_item_metadata(0, 4)
 	option_button.add_item("5 x 5")
-	option_button.set_item_metadata(1, 25)
+	option_button.set_item_metadata(1, 5)
 	option_button.add_item("6 x 6")
-	option_button.set_item_metadata(2, 36)
+	option_button.set_item_metadata(2, 6)
 	option_button.select(0)
 	option_button.item_selected.connect(self._option_selected)
 	
@@ -91,7 +91,6 @@ func _option_selected(index):
 	#change_status.rpc(multiplayer.get_unique_id())
 
 	
-	
 func _confirm_button_pressed():
 	cancel_button.visible = true
 	confirm_button.visible = false
@@ -112,6 +111,7 @@ func player_ready(id: int):
 			all_ok = all_ok and ok
 		if all_ok:
 			var key = choose_random_key()
+			
 			starting_game.rpc(true, key)
 		else:
 			starting_game.rpc(false)
