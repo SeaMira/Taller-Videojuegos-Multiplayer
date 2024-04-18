@@ -8,6 +8,6 @@ extends MultiplayerSynchronizer
 func _physics_process(delta: float) -> void:
 	if is_multiplayer_authority():
 		move_input = Input.get_vector("left", "right", "up", "down")
-		is_bullet = Input.is_action_just_pressed("test")
+		is_bullet = Input.is_action_just_pressed("shoot")
 		grab_piece = Input.is_action_just_pressed("grab")
 		free_piece = Input.is_action_just_pressed("free_piece")

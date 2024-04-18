@@ -6,7 +6,7 @@ var acceleration = 3000
 @onready var player_blue = $"."
 @onready var multiplayer_spawner: MultiplayerSpawner = $MultiplayerSpawner
 @onready var multiplayer_synchronizer: MultiplayerSynchronizer = $MultiplayerSynchronizer
-@onready var input_synchronizer: MultiplayerSynchronizer = $InputSynchronizer
+@onready var input_synchronizer = $InputSynchronizer
 @onready var animation_tree = $AnimationTree
 @onready var playback = animation_tree.get("parameters/playback")
 @export var bullet_scene: PackedScene
@@ -35,6 +35,7 @@ func _physics_process(delta):
 	if is_bullet:
 		var bullet = bullet_scene.instantiate()
 		bullet.set_position(global_position)
+		bullet.set_velocity(global_position.direction_to(get_global_mouse_position()) * 200)
 		multiplayer_spawner.add_child(bullet, true)
 	
 	if velocity.x > 0:
@@ -52,4 +53,3 @@ func _physics_process(delta):
 func send_data(pos: Vector2, vel: Vector2):
 	global_position = lerp(global_position, pos, 0.75)
 	velocity = lerp(velocity, vel, 0.75)
-	
