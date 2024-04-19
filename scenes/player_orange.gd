@@ -70,31 +70,34 @@ func send_data(pos: Vector2, vel: Vector2):
 func _on_area_2d_body_entered(body):
 	#if body.is_in_group('orange'):
 	pieces_on_area.append(body)
-	print(pieces_on_area)
+	#print(pieces_on_area)
 	
 func _on_area_2d_body_exited(body):
 	#if body.is_in_group('orange') and body in pieces_on_area:
 	pieces_on_area.erase(body)
-	print(pieces_on_area)
+	#print(pieces_on_area)
 
 @rpc("authority", "call_local")
 func grab_piece_action():
 	var max_z = -1000
 	var max_z_piece = null
-	for item in pieces_on_area:
-		print(item.z_index)
-		if item.z_index >= max_z:
-			max_z = item.z_index
-			max_z_piece = item
+	if pieces_on_area.size() > 0:
+		for item in pieces_on_area:
+			#print(item.z_index)
+			if item.z_index >= max_z:
+				max_z = item.z_index
+				max_z_piece = item
 		
-	print(max_z)
-	max_z_piece.reparent(player_orange)
-	piece_grabbed = max_z_piece
+	#print(max_z)
+	if max_z_piece != null:
+		max_z_piece.reparent(player_orange)
+		piece_grabbed = max_z_piece
 
 @rpc("authority", "call_local")
 func free_piece_action():
-	piece_grabbed.queue_free()
-	piece_grabbed = null
+	if piece_grabbed != null:
+		piece_grabbed.reparent(get_tree().get_root().get_node("/root/Main/PiecesShow"))
+		piece_grabbed = null
 	
 		
 	

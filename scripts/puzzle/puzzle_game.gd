@@ -22,9 +22,9 @@ func _ready():
 
 	for i in range(n):
 		for j in range(n):
-			var position = start_position + Vector2(j * (piece_size.x * scale_factor.x + margin), i * (piece_size.y * scale_factor.y + margin))
-			var v_pos = Vector2(get_viewport().size/4) - start_position 
-			piece_places_setup(i, j, piece_size.x, piece_size.y, position + v_pos)
+			var position =  Vector2(j * (piece_size.x * scale_factor.x + margin), i * (piece_size.y * scale_factor.y + margin))
+			var v_pos = Vector2(get_viewport().size/2) - start_position 
+			piece_places_setup(i, j, piece_size.x, piece_size.y, position + v_pos - Vector2(47, 5))
 			if multiplayer.is_server():
 				var rng = RandomNumberGenerator.new()
 				var rngx = rng.randf()
@@ -59,7 +59,7 @@ func place_blue_piece(i, j, n, rngx, rngy):
 	piece_body.add_to_group("blue")
 	var viewport_size = get_viewport().size
 	# Calcula la posición basándote en el tamaño de la pieza, escala, y márgenes
-	var position = Vector2(viewport_size.x*(0.8 + 0.2*rngx), viewport_size.y*(0.55 + 0.45*rngy))
+	var position = Vector2(viewport_size.x*(0.8 + 0.17*rngx), viewport_size.y*(0.55 + 0.42*rngy))
 	piece_body.position = position
 	#piece_body.scale = scale_factor
 	# Configura los RigidBody2D para ser estáticos o kinemáticos según lo necesites aquí
@@ -75,17 +75,42 @@ func place_orange_piece(i, j, n, rngx, rngy):
 	piece_body.add_to_group("orange")
 	var viewport_size = get_viewport().size
 	# Calcula la posición basándote en el tamaño de la pieza, escala, y márgenes
-	var position = Vector2(viewport_size.x*(0.8 + 0.2*rngx), viewport_size.y*0.45*rngy)
+	var position = Vector2(viewport_size.x*(0.8 + 0.2*rngx), viewport_size.y*(0.03 + 0.42*rngy))
 	piece_body.position = position
 	#piece_body.scale = scale_factor
 	# Configura los RigidBody2D para ser estáticos o kinemáticos según lo necesites aquí
 	# piece_body.mode = RigidBody2D.MODE_STATIC o RigidBody2D.MODE_KINEMATIC
 	
 func _on_cell_body_entered(body, area):
-	#var indxs = PuzzleSettings.search_piece(body)
-	#var body_name = "celda_" + str(indxs.x) + "_" + str(indxs.y)
-	#if area.name == body_name:
-		#print("algo entró ", area.name)
+	var bodies = area.get_overlapping_bodies()
+	if body.is_in_group("blue"):
+		var indxs = PuzzleSettings.search_blue_piece(body)
+		var body_name = "celda_" + str(indxs.x) + "_" + str(indxs.y)
+		print("body name", body_name, area.name)
+		if area.name == body_name:
+			if bodies.size() >= 2:
+				print("bodies size")
+				for b in bodies:
+					if b.is_in_group("orange"):
+						var indxs2 = PuzzleSettings.search_orange_piece(b)
+						var b_name = "celda_" + str(indxs2.x) + "_" + str(indxs2.y)
+						print(b_name, body_name)
+						if body_name == b_name:
+							print("tariamo entonce")
+	elif body.is_in_group("orange"):
+		var indxs = PuzzleSettings.search_orange_piece(body)
+		var body_name = "celda_" + str(indxs.x) + "_" + str(indxs.y)
+		print("body name", body_name, area.name)
+		if area.name == body_name:
+			if bodies.size() >= 2:
+				print("bodies size")
+				for b in bodies:
+					if b.is_in_group("blue"):
+						var indxs2 = PuzzleSettings.search_blue_piece(b)
+						var b_name = "celda_" + str(indxs2.x) + "_" + str(indxs2.y)
+						print(b_name, body_name)
+						if body_name == b_name:
+							print("tariamo entonce")
 	print("wena")
 	
 

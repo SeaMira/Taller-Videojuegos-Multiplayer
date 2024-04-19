@@ -1,0 +1,74 @@
+[gd_scene load_steps=3 format=3 uid="uid://bgr4becwcv71e"]
+
+[ext_resource type="Theme" uid="uid://bcr82ieiusuu8" path="res://resources/margin_container_margins.tres" id="1_coxps"]
+[ext_resource type="Script" path="res://scripts/puzzle/image_selection_gui.gd" id="2_q622s"]
+
+[node name="ImageSelectionGui" type="MarginContainer"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_top = 1.0
+offset_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 0
+size_flags_vertical = 4
+theme = ExtResource("1_coxps")
+script = ExtResource("2_q622s")
+
+[node name="PanelContainer" type="PanelContainer" parent="."]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 4
+
+[node name="MarginContainer" type="MarginContainer" parent="PanelContainer"]
+layout_mode = 2
+theme = ExtResource("1_coxps")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="PanelContainer/MarginContainer"]
+layout_mode = 2
+
+[node name="select_file_label" type="Label" parent="PanelContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+text = "Select an Image File for your Puzzle"
+horizontal_alignment = 1
+
+[node name="select_file_button" type="Button" parent="PanelContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+text = "Select Image"
+
+[node name="FileDialog" type="FileDialog" parent="PanelContainer/MarginContainer/VBoxContainer"]
+title = "Selecciona una Imagen"
+initial_position = 1
+size = Vector2i(316, 300)
+ok_button_text = "Abrir"
+mode_overrides_title = false
+file_mode = 0
+access = 2
+
+[node name="TextureRect" type="TextureRect" parent="PanelContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+expand_mode = 4
+
+[node name="select_pieces_amount" type="Label" parent="PanelContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+text = "How Many Pieces?"
+horizontal_alignment = 1
+
+[node name="OptionButton" type="OptionButton" parent="PanelContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="ConfirmButton" type="Button" parent="PanelContainer/MarginContainer/VBoxContainer"]
+layout_mode = 2
+text = "Empezar Juego
+"
+
+[node name="CancelButton" type="Button" parent="PanelContainer/MarginContainer/VBoxContainer"]
+visible = false
+layout_mode = 2
+text = "Cancelar
+"
+
+[node name="AcceptDialog" type="AcceptDialog" parent="PanelContainer/MarginContainer/VBoxContainer"]
+initial_position = 1
+dialog_text = "Archivo seleccionado no es una imagen!"

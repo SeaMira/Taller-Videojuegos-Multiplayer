@@ -36,12 +36,14 @@ class PuzzlePieceData:
 
 func search_blue_piece(piece: RigidBody2D):
 	for p in blue_pieces:
-		if p.body == piece:
+		var n = p.body.name
+		if n == piece.name:
 			return Vector2(p.idx, p.idy)
 			
 func search_orange_piece(piece: RigidBody2D):
 	for p in orange_pieces:
-		if p.body == piece:
+		var n = p.body.name
+		if n == piece.name:
 			return Vector2(p.idx, p.idy)
 
 func _ready():

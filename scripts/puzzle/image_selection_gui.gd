@@ -184,8 +184,8 @@ func setting_puzzle(image_player):
 	PuzzleSettings.blue_pieces.clear()
 	for i in range(PUZZLE_PIECES):
 		for j in range(PUZZLE_PIECES):
-			var orange_piece_body = new_piece_body(image_texture, i, j, texture_width, texture_height, scale_x, scale_y, PUZZLE_PIECES, piece_width, piece_height)
-			var blue_piece_body = new_piece_body(image_texture, i, j, texture_width, texture_height, scale_x, scale_y, PUZZLE_PIECES, piece_width, piece_height)
+			var orange_piece_body = new_piece_body(image_texture, i, j, texture_width, texture_height, scale_x, scale_y, PUZZLE_PIECES, "orange")
+			var blue_piece_body = new_piece_body(image_texture, i, j, texture_width, texture_height, scale_x, scale_y, PUZZLE_PIECES, "blue")
 			
 			var orange_piece = PuzzleSettings.PuzzlePieceData.new(i, j, orange_piece_body)
 			PuzzleSettings.orange_pieces.append(orange_piece)
@@ -193,16 +193,18 @@ func setting_puzzle(image_player):
 			var blue_piece = PuzzleSettings.PuzzlePieceData.new(i, j, blue_piece_body)
 			PuzzleSettings.blue_pieces.append(blue_piece)
 
-func new_piece_body(image_texture, i, j, texture_width, texture_height, scale_x, scale_y, PUZZLE_PIECES, piece_width, piece_height):
+func new_piece_body(image_texture, i, j, texture_width, texture_height, scale_x, scale_y, PUZZLE_PIECES, tag):
 	var piece_body = RigidBody2D.new()
 			
 	var piece_sprite = Sprite2D.new()
 	piece_sprite.texture = image_texture
 	piece_sprite.region_enabled = true
-	var text_width_ppp = texture_width/PUZZLE_PIECES
-	var text_height_ppp = texture_height/PUZZLE_PIECES
-	piece_sprite.region_rect = Rect2(i * text_width_ppp, j * text_height_ppp, text_width_ppp, text_height_ppp)
-	piece_sprite.scale = Vector2(scale_x, scale_y)
+	#var text_width_ppp = texture_width/PUZZLE_PIECES
+	var text_width_ppp = get_viewport().size.x*0.6/10
+	#var text_height_ppp = texture_height/PUZZLE_PIECES
+	var text_height_ppp = get_viewport().size.y*0.6/10
+	piece_sprite.region_rect = Rect2(i * texture_width/PUZZLE_PIECES, j * texture_height/PUZZLE_PIECES, texture_width/PUZZLE_PIECES, texture_height/PUZZLE_PIECES)
+	piece_sprite.scale = Vector2(scale_x/pow(10, 0.5), scale_y/pow(10, 0.5))
 	
 	var contorno_sprite = piece_sprite.duplicate()
 	contorno_sprite.modulate = Color(0, 0, 0, 1)  # Cambia el color a negro para el contorno
@@ -217,11 +219,12 @@ func new_piece_body(image_texture, i, j, texture_width, texture_height, scale_x,
 	var shape = RectangleShape2D.new()
 	
 	# Ajusta la extensión de la forma de colisión para que coincida con las dimensiones escaladas del sprite
-	shape.extents = Vector2(piece_width / 2, piece_height / 2) 
+	shape.extents = Vector2(text_width_ppp / 2, text_height_ppp / 2) 
 	collision_shape.shape = shape
 	piece_body.gravity_scale = 0
 	piece_body.collision_layer = 1 
 	piece_body.collision_mask  = 2
+	piece_body.name = tag + "_" + str(i) + "_" + str(j)
 	piece_body.add_child(collision_shape)
 	
 	return piece_body
