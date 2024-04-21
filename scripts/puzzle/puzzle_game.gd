@@ -2,9 +2,10 @@ extends Node
 
 @onready var pieces_show = $"."
 var puzzle: Sprite2D = null
-
+var PIECE_SIZE = null
 # Called when the node enters the scene tree for the first time.
 func _ready():
+	set_multiplayer_authority(multiplayer.get_unique_id())
 	puzzle = Sprite2D.new()
 	#puzzle.modulate.a = 0.5
 	puzzle.texture = PuzzleSettings.PUZZLE_IMAGE
@@ -17,6 +18,7 @@ func _ready():
 	var start_position = Vector2(50, 50) # Posición inicial de la cuadrícula
 	var margin = 0 # Margen entre piezas
 	var piece_size = get_viewport().size * (0.6/PuzzleSettings.PUZZLE_PIECES) # Asume un tamaño fijo para las piezas
+	PIECE_SIZE = piece_size
 	var scale_factor = Vector2(1.0, 1.0)
 	var n = PuzzleSettings.PUZZLE_PIECES
 
@@ -81,38 +83,47 @@ func place_orange_piece(i, j, n, rngx, rngy):
 	# Configura los RigidBody2D para ser estáticos o kinemáticos según lo necesites aquí
 	# piece_body.mode = RigidBody2D.MODE_STATIC o RigidBody2D.MODE_KINEMATIC
 	
+
 func _on_cell_body_entered(body, area):
-	var bodies = area.get_overlapping_bodies()
-	if body.is_in_group("blue"):
-		var indxs = PuzzleSettings.search_blue_piece(body)
-		var body_name = "celda_" + str(indxs.x) + "_" + str(indxs.y)
-		print("body name", body_name, area.name)
-		if area.name == body_name:
-			if bodies.size() >= 2:
-				print("bodies size")
-				for b in bodies:
-					if b.is_in_group("orange"):
-						var indxs2 = PuzzleSettings.search_orange_piece(b)
-						var b_name = "celda_" + str(indxs2.x) + "_" + str(indxs2.y)
-						print(b_name, body_name)
-						if body_name == b_name:
-							print("tariamo entonce")
-	elif body.is_in_group("orange"):
-		var indxs = PuzzleSettings.search_orange_piece(body)
-		var body_name = "celda_" + str(indxs.x) + "_" + str(indxs.y)
-		print("body name", body_name, area.name)
-		if area.name == body_name:
-			if bodies.size() >= 2:
-				print("bodies size")
-				for b in bodies:
-					if b.is_in_group("blue"):
-						var indxs2 = PuzzleSettings.search_blue_piece(b)
-						var b_name = "celda_" + str(indxs2.x) + "_" + str(indxs2.y)
-						print(b_name, body_name)
-						if body_name == b_name:
-							print("tariamo entonce")
-	print("wena")
-	
+	if is_multiplayer_authority():
+		var bodies = area.get_overlapping_bodies()
+		if body.is_in_group("blue"):
+			var indxs = PuzzleSettings.search_blue_piece(body)
+			var body_name = "celda_" + str(indxs.x) + "_" + str(indxs.y)
+			#print("body name", body_name, area.name)
+			if area.name == body_name:
+				if bodies.size() >= 2:
+					#print("bodies size")
+					for b in bodies:
+						if b.is_in_group("orange"):
+							var indxs2 = PuzzleSettings.search_orange_piece(b)
+							var b_name = "celda_" + str(indxs2.x) + "_" + str(indxs2.y)
+							#print(b_name, body_name)
+							if body_name == b_name:
+								prueba.rpc()
+		elif body.is_in_group("orange"):
+			var indxs = PuzzleSettings.search_orange_piece(body)
+			var body_name = "celda_" + str(indxs.x) + "_" + str(indxs.y)
+			#print("body name", body_name, area.name)
+			if area.name == body_name:
+				if bodies.size() >= 2:
+					#print("bodies size")
+					for b in bodies:
+						if b.is_in_group("blue"):
+							var indxs2 = PuzzleSettings.search_blue_piece(b)
+							var b_name = "celda_" + str(indxs2.x) + "_" + str(indxs2.y)
+							#print(b_name, body_name)
+							if body_name == b_name:
+								prueba.rpc(area.name)
+		
+@rpc("any_peer", "call_local", "reliable")
+func prueba(area_name):
+	var idxs = area_name.split("_")
+	var x = int(idxs[1])
+	var y = int(idxs[2])
+	print(x, y)
+	PuzzleSettings.clean_by_ids(x, y)
+	#print("tariamo entonce")
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):

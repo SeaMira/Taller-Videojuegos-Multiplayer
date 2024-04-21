@@ -187,10 +187,10 @@ func setting_puzzle(image_player):
 			var orange_piece_body = new_piece_body(image_texture, i, j, texture_width, texture_height, scale_x, scale_y, PUZZLE_PIECES, "orange")
 			var blue_piece_body = new_piece_body(image_texture, i, j, texture_width, texture_height, scale_x, scale_y, PUZZLE_PIECES, "blue")
 			
-			var orange_piece = PuzzleSettings.PuzzlePieceData.new(i, j, orange_piece_body)
+			var orange_piece = PuzzleSettings.PuzzlePieceData.new(j, i, orange_piece_body)
 			PuzzleSettings.orange_pieces.append(orange_piece)
 			
-			var blue_piece = PuzzleSettings.PuzzlePieceData.new(i, j, blue_piece_body)
+			var blue_piece = PuzzleSettings.PuzzlePieceData.new(j, i, blue_piece_body)
 			PuzzleSettings.blue_pieces.append(blue_piece)
 
 func new_piece_body(image_texture, i, j, texture_width, texture_height, scale_x, scale_y, PUZZLE_PIECES, tag):
@@ -224,7 +224,7 @@ func new_piece_body(image_texture, i, j, texture_width, texture_height, scale_x,
 	piece_body.gravity_scale = 0
 	piece_body.collision_layer = 1 
 	piece_body.collision_mask  = 2
-	piece_body.name = tag + "_" + str(i) + "_" + str(j)
+	piece_body.name = tag + "_" + str(j) + "_" + str(i)
 	piece_body.add_child(collision_shape)
 	
 	return piece_body

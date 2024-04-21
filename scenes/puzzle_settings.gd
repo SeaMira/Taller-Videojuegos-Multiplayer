@@ -45,6 +45,21 @@ func search_orange_piece(piece: RigidBody2D):
 		var n = p.body.name
 		if n == piece.name:
 			return Vector2(p.idx, p.idy)
+			
+func clean_by_ids(x, y):
+	var sz = blue_pieces.size()
+	var sz2 = orange_pieces.size()
+	var o_ok = false
+	var b_ok = false
+	for i in range(sz):
+		if !o_ok and orange_pieces[i].idx == x and orange_pieces[i].idy == y :
+			orange_pieces[i].body.queue_free()
+			orange_pieces.remove_at(i)
+			o_ok = true
+		if !b_ok and blue_pieces[i].idx == x and blue_pieces[i].idy == y:
+			blue_pieces[i].body.queue_free()
+			blue_pieces.remove_at(i)
+			b_ok = true
 
 func _ready():
 	pass # Replace with function body.

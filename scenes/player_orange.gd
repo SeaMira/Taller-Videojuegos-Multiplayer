@@ -77,7 +77,7 @@ func _on_area_2d_body_exited(body):
 	pieces_on_area.erase(body)
 	#print(pieces_on_area)
 
-@rpc("authority", "call_local")
+@rpc("authority", "call_local", "reliable")
 func grab_piece_action():
 	var max_z = -1000
 	var max_z_piece = null
@@ -93,9 +93,10 @@ func grab_piece_action():
 		max_z_piece.reparent(player_orange)
 		piece_grabbed = max_z_piece
 
-@rpc("authority", "call_local")
+@rpc("authority", "call_local", "reliable")
 func free_piece_action():
 	if piece_grabbed != null:
+		print("dropped")
 		piece_grabbed.reparent(get_tree().get_root().get_node("/root/Main/PiecesShow"))
 		piece_grabbed = null
 	
