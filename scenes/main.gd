@@ -5,7 +5,8 @@ var player_scene_blue = preload("res://scenes/player_blue.tscn")
 var player_scene_orange = preload("res://scenes/player_orange.tscn")
 #@export var player_scene: PackedScene
 @onready var players: Node2D = $Players
-
+@onready var blue_piece = $Inventory/BlueBox/BluePiece
+@onready var orange_piece = $Inventory/OrangeBox/OrangePiece
 
 func _ready() -> void:
 	for player_data in Game.players:
@@ -17,6 +18,8 @@ func _ready() -> void:
 		else: # orange
 			player = player_scene_orange.instantiate()
 			
+		player.blue_piece = blue_piece
+		player.orange_piece = orange_piece
 		players.add_child(player)
 		player.setup(player_data)
 	

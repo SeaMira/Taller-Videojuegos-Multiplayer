@@ -1,9 +1,9 @@
 [gd_scene load_steps=31 format=3 uid="uid://cend8m8ic1rnv"]
 
-[ext_resource type="Script" path="res://scenes/player_orange.gd" id="1_jrh40"]
+[ext_resource type="Script" path="res://scenes/player.gd" id="1_vfms6"]
 [ext_resource type="PackedScene" uid="uid://dskjy6yd4quog" path="res://scenes/bullet.tscn" id="2_ih2x5"]
-[ext_resource type="Script" path="res://scenes/input_synchronizer_orange.gd" id="3_7jkca"]
 [ext_resource type="Texture2D" uid="uid://cm42ieuxve1l1" path="res://assets/characters.png" id="3_wl0xc"]
+[ext_resource type="Script" path="res://scenes/input_synchronizer.gd" id="4_te4xv"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_rl8oa"]
 size = Vector2(13, 11)
@@ -193,7 +193,7 @@ position = Vector2(339, 427)
 collision_layer = 4
 collision_mask = 16
 motion_mode = 1
-script = ExtResource("1_jrh40")
+script = ExtResource("1_vfms6")
 bullet_scene = ExtResource("2_ih2x5")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
@@ -225,7 +225,7 @@ anim_player = NodePath("../AnimationPlayer")
 
 [node name="InputSynchronizer" type="MultiplayerSynchronizer" parent="."]
 replication_config = SubResource("SceneReplicationConfig_12dua")
-script = ExtResource("3_7jkca")
+script = ExtResource("4_te4xv")
 
 [node name="Area2D" type="Area2D" parent="."]
 position = Vector2(-0.5, 4.5)

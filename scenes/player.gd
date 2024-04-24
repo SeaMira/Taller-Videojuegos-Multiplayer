@@ -6,13 +6,16 @@ var pieces_on_area = []
 var piece_grabbed = null
 @onready var with_piece = 0
 
-@onready var player_orange = $"."
+@onready var player = $"."
 @onready var multiplayer_spawner = $MultiplayerSpawner
 @onready var multiplayer_synchronizer: MultiplayerSynchronizer = $MultiplayerSynchronizer
 @onready var input_synchronizer: MultiplayerSynchronizer = $InputSynchronizer
 @onready var animation_tree = $AnimationTree
 @onready var playback = animation_tree.get("parameters/playback")
 @export var bullet_scene: PackedScene
+
+var blue_piece
+var orange_piece
 
 @export var score = 1 :
 	set(value):
@@ -90,8 +93,18 @@ func grab_piece_action():
 		
 	#print(max_z)
 	if max_z_piece != null:
-		max_z_piece.reparent(player_orange)
+		max_z_piece.reparent(player)
 		piece_grabbed = max_z_piece
+		
+		print(orange_piece)
+		print(blue_piece)
+		
+		if player.is_in_group('orange'):
+			var piece_texture = piece_grabbed.get_child(0).texture
+			var piece_name_splitted = piece_grabbed.name.split('_')
+			var piece_index = [piece_name_splitted[1].to_int(), piece_name_splitted[2].to_int()]
+			print(piece_index)
+			#orange_piece.texture = piece_texture
 
 @rpc("authority", "call_local", "reliable")
 func free_piece_action():
