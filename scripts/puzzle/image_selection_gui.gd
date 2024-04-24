@@ -1,5 +1,5 @@
 extends MarginContainer
-
+var base_size = Vector2i(960, 540) 
 @onready var image_selection_gui = $"."
 @onready var select_file_button = $PanelContainer/MarginContainer/VBoxContainer/select_file_button
 @onready var file_dialog = $PanelContainer/MarginContainer/VBoxContainer/FileDialog
@@ -162,7 +162,7 @@ func setting_puzzle(image_player):
 	var image_texture = ImageTexture.new()
 	image_texture.set_image(image)
 
-	var viewport_size = get_viewport().size
+	var viewport_size = base_size
 	var target_width = viewport_size.x * 0.6
 	var target_height = viewport_size.y * 0.6
 	print(viewport_size, target_width, target_height)
@@ -200,9 +200,9 @@ func new_piece_body(image_texture, i, j, texture_width, texture_height, scale_x,
 	piece_sprite.texture = image_texture
 	piece_sprite.region_enabled = true
 	#var text_width_ppp = texture_width/PUZZLE_PIECES
-	var text_width_ppp = get_viewport().size.x*0.6/10
+	var text_width_ppp = base_size.x*0.6/10
 	#var text_height_ppp = texture_height/PUZZLE_PIECES
-	var text_height_ppp = get_viewport().size.y*0.6/10
+	var text_height_ppp = base_size.y*0.6/10
 	piece_sprite.region_rect = Rect2(i * texture_width/PUZZLE_PIECES, j * texture_height/PUZZLE_PIECES, texture_width/PUZZLE_PIECES, texture_height/PUZZLE_PIECES)
 	piece_sprite.scale = Vector2(scale_x/pow(10, 0.5), scale_y/pow(10, 0.5))
 	

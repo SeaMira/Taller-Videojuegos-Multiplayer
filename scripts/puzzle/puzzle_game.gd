@@ -1,5 +1,7 @@
 extends Node
 
+var base_size = Vector2i(960, 540) 
+
 @onready var pieces_show = $"."
 var puzzle: Sprite2D = null
 var PIECE_SIZE = null
@@ -10,14 +12,14 @@ func _ready():
 	#puzzle.modulate.a = 0.5
 	puzzle.texture = PuzzleSettings.PUZZLE_IMAGE
 	puzzle.scale = PuzzleSettings.PUZZLE_SCALE
-	puzzle.position = get_viewport().size/2
+	puzzle.position = base_size/2
 	puzzle.modulate.a = 0.3
 	add_child(puzzle)
 	
 	
 	var start_position = Vector2(50, 50) # Posición inicial de la cuadrícula
 	var margin = 0 # Margen entre piezas
-	var piece_size = get_viewport().size * (0.6/PuzzleSettings.PUZZLE_PIECES) # Asume un tamaño fijo para las piezas
+	var piece_size = base_size * (0.6/PuzzleSettings.PUZZLE_PIECES) # Asume un tamaño fijo para las piezas
 	PIECE_SIZE = piece_size
 	var scale_factor = Vector2(1.0, 1.0)
 	var n = PuzzleSettings.PUZZLE_PIECES
@@ -25,7 +27,7 @@ func _ready():
 	for i in range(n):
 		for j in range(n):
 			var position =  Vector2(j * (piece_size.x * scale_factor.x + margin), i * (piece_size.y * scale_factor.y + margin))
-			var v_pos = Vector2(get_viewport().size/2) - start_position 
+			var v_pos = Vector2(base_size/2) - start_position 
 			piece_places_setup(i, j, piece_size.x, piece_size.y, position + v_pos - Vector2(47, 5))
 			if multiplayer.is_server():
 				var rng = RandomNumberGenerator.new()
@@ -59,7 +61,7 @@ func place_blue_piece(i, j, n, rngx, rngy):
 	piece_body.z_index = indx
 	add_child(piece_body)
 	piece_body.add_to_group("blue")
-	var viewport_size = get_viewport().size
+	var viewport_size = base_size
 	# Calcula la posición basándote en el tamaño de la pieza, escala, y márgenes
 	var position = Vector2(viewport_size.x*(0.8 + 0.17*rngx), viewport_size.y*(0.55 + 0.42*rngy))
 	piece_body.position = position
@@ -75,7 +77,7 @@ func place_orange_piece(i, j, n, rngx, rngy):
 	piece_body.z_index = indx
 	add_child(piece_body)
 	piece_body.add_to_group("orange")
-	var viewport_size = get_viewport().size
+	var viewport_size = base_size
 	# Calcula la posición basándote en el tamaño de la pieza, escala, y márgenes
 	var position = Vector2(viewport_size.x*(0.8 + 0.2*rngx), viewport_size.y*(0.03 + 0.42*rngy))
 	piece_body.position = position
@@ -87,7 +89,7 @@ func place_orange_piece(i, j, n, rngx, rngy):
 func _on_cell_body_entered(body, area):
 	if is_multiplayer_authority():
 		var bodies = area.get_overlapping_bodies()
-		if body.is_in_group("blue"):
+		if body.is_in_group("blue") and !(body is CharacterBody2D):
 			var indxs = PuzzleSettings.search_blue_piece(body)
 			var body_name = "celda_" + str(indxs.x) + "_" + str(indxs.y)
 			#print("body name", body_name, area.name)
@@ -100,8 +102,8 @@ func _on_cell_body_entered(body, area):
 							var b_name = "celda_" + str(indxs2.x) + "_" + str(indxs2.y)
 							#print(b_name, body_name)
 							if body_name == b_name:
-								prueba.rpc()
-		elif body.is_in_group("orange"):
+								prueba.rpc(area.name)
+		elif body.is_in_group("orange") and !(body is CharacterBody2D):
 			var indxs = PuzzleSettings.search_orange_piece(body)
 			var body_name = "celda_" + str(indxs.x) + "_" + str(indxs.y)
 			#print("body name", body_name, area.name)
@@ -122,9 +124,21 @@ func prueba(area_name):
 	var x = int(idxs[1])
 	var y = int(idxs[2])
 	print(x, y)
+	place_piece_image(x, y)
 	PuzzleSettings.clean_by_ids(x, y)
 	#print("tariamo entonce")
 
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta):
-	pass
+
+func place_piece_image(x, y):
+	var piece = Sprite2D.new()
+	#puzzle.modulate.a = 0.5
+	var w = PuzzleSettings.PUZZLE_IMAGE.get_width()/PuzzleSettings.PUZZLE_PIECES 
+	var h = PuzzleSettings.PUZZLE_IMAGE.get_height()/PuzzleSettings.PUZZLE_PIECES
+	piece.texture = PuzzleSettings.PUZZLE_IMAGE
+	piece.region_enabled = true
+	piece.region_rect = Rect2(y * w, x * h, w, h)
+	piece.scale = PuzzleSettings.PUZZLE_SCALE
+	var offsetx = ((y- (int((PuzzleSettings.PUZZLE_PIECES)/2)+1/2))*w + w/2)*PuzzleSettings.PUZZLE_SCALE.x
+	var offsety = ((x- (int((PuzzleSettings.PUZZLE_PIECES)/2)))*h + h/2)*PuzzleSettings.PUZZLE_SCALE.y
+	piece.position = base_size/2 + Vector2i(offsetx, offsety)
+	add_child(piece)
