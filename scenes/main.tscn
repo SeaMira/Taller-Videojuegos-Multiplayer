@@ -365,9 +365,7 @@ scale = Vector2(8, 8)
 texture = ExtResource("5_186ka")
 script = ExtResource("6_jsrp1")
 
-[node name="BluePiece" type="TextureRect" parent="Inventory/BlueBox"]
-offset_right = 40.0
-offset_bottom = 40.0
+[node name="BluePiece" type="Sprite2D" parent="Inventory/BlueBox"]
 
 [node name="OrangeBox" type="Sprite2D" parent="Inventory" groups=["orange"]]
 texture_filter = 1
@@ -375,8 +373,6 @@ scale = Vector2(8, 8)
 texture = ExtResource("7_qod55")
 script = ExtResource("6_jsrp1")
 
-[node name="OrangePiece" type="TextureRect" parent="Inventory/OrangeBox"]
-offset_right = 40.0
-offset_bottom = 40.0
+[node name="OrangePiece" type="Sprite2D" parent="Inventory/OrangeBox"]
 
 [node name="Players" type="Node2D" parent="."]
