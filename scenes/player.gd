@@ -14,6 +14,8 @@ var piece_grabbed = null
 @onready var playback = animation_tree.get("parameters/playback")
 @export var bullet_scene: PackedScene
 
+signal fired(bullet)
+
 var blue_piece
 var orange_piece
 
@@ -34,17 +36,14 @@ func setup(player_data: Statics.PlayerData):
 func _physics_process(delta):
 	var move_input = input_synchronizer.move_input
 	var target_velocity = move_input * speed
-	var is_bullet = input_synchronizer.is_bullet
 	var grab_piece = input_synchronizer.grab_piece
 	var free_piece = input_synchronizer.free_piece
 	velocity = velocity.move_toward(target_velocity, acceleration * delta)
 	move_and_slide()
-	
-	if is_bullet:
-		var bullet = bullet_scene.instantiate()
-		bullet.set_position(global_position)
-		bullet.set_velocity(global_position.direction_to(get_global_mouse_position()) * 200)
-		multiplayer_spawner.add_child(bullet, true)
+	if is_multiplayer_authority():
+		if Input.is_action_just_pressed("fire"):
+			fire.rpc_id(1, get_global_mouse_position())
+
 
 	if grab_piece and not with_piece:
 		grab_piece_action.rpc()
@@ -136,5 +135,12 @@ func free_piece_action():
 		
 		elif player.is_in_group('blue'):
 			blue_piece.texture = null
+
+@rpc("call_local")
+func fire(mouse_pos):
+	var bullet_inst = bullet_scene.instantiate()
+	bullet_inst.set_velocity(global_position.direction_to(mouse_pos) * 200)
+	bullet_inst.global_position = global_position
+	fired.emit(bullet_inst)
 
 

@@ -376,3 +376,9 @@ script = ExtResource("6_jsrp1")
 [node name="OrangePiece" type="Sprite2D" parent="Inventory/OrangeBox"]
 
 [node name="Players" type="Node2D" parent="."]
+
+[node name="MultiplayerSpawner" type="MultiplayerSpawner" parent="."]
+_spawnable_scenes = PackedStringArray("res://scenes/bullet.tscn")
+spawn_path = NodePath("../Bullets")
+
+[node name="Bullets" type="Node2D" parent="."]
