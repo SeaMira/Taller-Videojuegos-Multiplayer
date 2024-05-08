@@ -1,4 +1,4 @@
-[gd_scene load_steps=12 format=3 uid="uid://b5hufqs7sbm01"]
+[gd_scene load_steps=23 format=3 uid="uid://b5hufqs7sbm01"]
 
 [ext_resource type="Script" path="res://scenes/main.gd" id="1_ysfbh"]
 [ext_resource type="Texture2D" uid="uid://yvb5odlpjxkk" path="res://assets/grass.png" id="2_0yjug"]
@@ -7,6 +7,8 @@
 [ext_resource type="Texture2D" uid="uid://dirfia6cbssxm" path="res://assets/blue_box.png" id="5_186ka"]
 [ext_resource type="Script" path="res://scenes/BlueBox.gd" id="6_jsrp1"]
 [ext_resource type="Texture2D" uid="uid://krt2y0sagms" path="res://assets/orange_box.png" id="7_qod55"]
+[ext_resource type="Texture2D" uid="uid://cw1tfsm6qxare" path="res://assets/blue_area.png" id="8_iuh72"]
+[ext_resource type="Texture2D" uid="uid://dhldreuuf420u" path="res://assets/orange_area.png" id="9_bxcei"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_w68u3"]
 texture = ExtResource("2_0yjug")
@@ -334,7 +336,7 @@ texture = ExtResource("4_tul2r")
 8:4/0/physics_layer_0/angular_velocity = 0.0
 
 [sub_resource type="TileSet" id="TileSet_rjec6"]
-physics_layer_0/collision_layer = 16
+physics_layer_0/collision_layer = 48
 physics_layer_0/collision_mask = 0
 terrain_set_0/mode = 0
 terrain_set_0/terrain_0/name = "Terrain 0"
@@ -346,6 +348,40 @@ terrain_set_0/terrain_2/color = Color(0.46875, 0.5, 0.25, 1)
 sources/0 = SubResource("TileSetAtlasSource_w68u3")
 sources/1 = SubResource("TileSetAtlasSource_ki6lq")
 sources/2 = SubResource("TileSetAtlasSource_467t8")
+
+[sub_resource type="SegmentShape2D" id="SegmentShape2D_61gku"]
+a = Vector2(0, -2)
+b = Vector2(0, 318)
+
+[sub_resource type="SegmentShape2D" id="SegmentShape2D_4ds4d"]
+a = Vector2(192, 429)
+b = Vector2(766, 429)
+
+[sub_resource type="SegmentShape2D" id="SegmentShape2D_pve80"]
+a = Vector2(-194, 0)
+b = Vector2(0, 0)
+
+[sub_resource type="SegmentShape2D" id="SegmentShape2D_exgur"]
+a = Vector2(0, -32)
+b = Vector2(0, 348)
+
+[sub_resource type="SegmentShape2D" id="SegmentShape2D_urg4t"]
+a = Vector2(0, -32)
+b = Vector2(0, 348)
+
+[sub_resource type="SegmentShape2D" id="SegmentShape2D_767u8"]
+a = Vector2(192, 429)
+b = Vector2(766, 429)
+
+[sub_resource type="SegmentShape2D" id="SegmentShape2D_bsgxf"]
+a = Vector2(192, 429)
+b = Vector2(766, 429)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_7i4ek"]
+size = Vector2(570, 30)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_bq2m2"]
+size = Vector2(570, 30)
 
 [node name="Main" type="Node2D"]
 script = ExtResource("1_ysfbh")
@@ -382,3 +418,77 @@ _spawnable_scenes = PackedStringArray("res://scenes/bullet.tscn")
 spawn_path = NodePath("../Bullets")
 
 [node name="Bullets" type="Node2D" parent="."]
+
+[node name="ImageBorders" type="Node2D" parent="."]
+
+[node name="PlayerBorder" type="StaticBody2D" parent="ImageBorders"]
+disable_mode = 1
+collision_layer = 16
+collision_mask = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="ImageBorders/PlayerBorder"]
+position = Vector2(193, 112)
+shape = SubResource("SegmentShape2D_61gku")
+
+[node name="CollisionShape2D2" type="CollisionShape2D" parent="ImageBorders/PlayerBorder"]
+position = Vector2(765, 112)
+shape = SubResource("SegmentShape2D_61gku")
+
+[node name="CollisionShape2D3" type="CollisionShape2D" parent="ImageBorders/PlayerBorder"]
+shape = SubResource("SegmentShape2D_4ds4d")
+
+[node name="CollisionShape2D4" type="CollisionShape2D" parent="ImageBorders/PlayerBorder"]
+position = Vector2(0, -318)
+shape = SubResource("SegmentShape2D_4ds4d")
+
+[node name="CollisionShape2D5" type="CollisionShape2D" parent="ImageBorders/PlayerBorder"]
+position = Vector2(193, 272)
+shape = SubResource("SegmentShape2D_pve80")
+
+[node name="CollisionShape2D6" type="CollisionShape2D" parent="ImageBorders/PlayerBorder"]
+position = Vector2(959, 272)
+shape = SubResource("SegmentShape2D_pve80")
+
+[node name="ProjectileBorder" type="StaticBody2D" parent="ImageBorders"]
+collision_layer = 32
+collision_mask = 0
+
+[node name="CollisionShape2D5" type="CollisionShape2D" parent="ImageBorders/ProjectileBorder"]
+position = Vector2(193, 112)
+shape = SubResource("SegmentShape2D_exgur")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="ImageBorders/ProjectileBorder"]
+position = Vector2(765, 112)
+shape = SubResource("SegmentShape2D_urg4t")
+
+[node name="CollisionShape2D2" type="CollisionShape2D" parent="ImageBorders/ProjectileBorder"]
+position = Vector2(0, 30)
+shape = SubResource("SegmentShape2D_767u8")
+
+[node name="CollisionShape2D3" type="CollisionShape2D" parent="ImageBorders/ProjectileBorder"]
+position = Vector2(0, -348)
+shape = SubResource("SegmentShape2D_bsgxf")
+
+[node name="ShootingZone" type="Node2D" parent="."]
+
+[node name="BlueArea" type="Area2D" parent="ShootingZone"]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="ShootingZone/BlueArea"]
+position = Vector2(479, 97)
+shape = SubResource("RectangleShape2D_7i4ek")
+
+[node name="BlueArea" type="Sprite2D" parent="ShootingZone/BlueArea"]
+position = Vector2(479, 97)
+scale = Vector2(35.625, 1.75)
+texture = ExtResource("8_iuh72")
+
+[node name="OrangeArea" type="Area2D" parent="ShootingZone"]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="ShootingZone/OrangeArea"]
+position = Vector2(479, 443)
+shape = SubResource("RectangleShape2D_bq2m2")
+
+[node name="OrangeArea" type="Sprite2D" parent="ShootingZone/OrangeArea"]
+position = Vector2(479.5, 444)
+scale = Vector2(35.8125, 1.625)
+texture = ExtResource("9_bxcei")

@@ -43,6 +43,8 @@ func _physics_process(delta):
 	if is_multiplayer_authority():
 		if Input.is_action_just_pressed("fire"):
 			fire.rpc_id(1, get_global_mouse_position())
+	if Input.is_action_just_pressed("position"):
+		print(get_global_mouse_position())
 
 
 	if grab_piece and not with_piece:

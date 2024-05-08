@@ -186,7 +186,7 @@ properties/0/replication_mode = 1
 
 [node name="PlayerOrange" type="CharacterBody2D" groups=["orange"]]
 z_index = 4096
-position = Vector2(339, 427)
+position = Vector2(389, 484)
 collision_layer = 4
 collision_mask = 16
 motion_mode = 1

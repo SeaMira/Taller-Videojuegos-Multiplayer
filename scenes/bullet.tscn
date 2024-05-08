@@ -18,7 +18,7 @@ properties/1/replication_mode = 0
 position = Vector2(800, 200)
 scale = Vector2(0.1, 0.1)
 collision_layer = 8
-collision_mask = 17
+collision_mask = 32
 script = ExtResource("1_udq8v")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
