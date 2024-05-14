@@ -397,7 +397,8 @@ layer_1/tile_data = PackedInt32Array(2162688, 1, 2, 2097152, 1, 1, 2031616, 1, 1
 [node name="Inventory" type="CanvasLayer" parent="."]
 
 [node name="BlueBox" type="Sprite2D" parent="Inventory" groups=["blue"]]
-scale = Vector2(8, 8)
+position = Vector2(103, 105)
+scale = Vector2(11, 11)
 texture = ExtResource("5_186ka")
 script = ExtResource("6_jsrp1")
 
@@ -405,7 +406,8 @@ script = ExtResource("6_jsrp1")
 
 [node name="OrangeBox" type="Sprite2D" parent="Inventory" groups=["orange"]]
 texture_filter = 1
-scale = Vector2(8, 8)
+position = Vector2(104, 441)
+scale = Vector2(11, 11)
 texture = ExtResource("7_qod55")
 script = ExtResource("6_jsrp1")
 
