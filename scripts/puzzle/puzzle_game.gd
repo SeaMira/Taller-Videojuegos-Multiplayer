@@ -27,17 +27,17 @@ func _ready():
 	for i in range(n):
 		for j in range(n):
 			var position =  Vector2(j * (piece_size.x * scale_factor.x + margin), i * (piece_size.y * scale_factor.y + margin))
-			var v_pos = Vector2(base_size/2) - start_position 
-			piece_places_setup(i, j, piece_size.x, piece_size.y, position + v_pos - Vector2(47, 5))
+			var v_pos = Vector2(base_size*(0.2)) + Vector2(piece_size/2)
+			piece_places_setup(i, j, piece_size.x, piece_size.y, position + v_pos )
 			if multiplayer.is_server():
 				var rng = RandomNumberGenerator.new()
 				var rngx = rng.randf()
 				var rngy = rng.randf()
 				place_blue_piece.rpc(i, j, n, rngx, rngy)
 				place_orange_piece.rpc(i, j, n, rngx, rngy)
-			
-			
-	
+
+
+
 func piece_places_setup(i, j, width, height, pos):
 	var area = Area2D.new()
 	var shape = CollisionShape2D.new()
@@ -46,7 +46,7 @@ func piece_places_setup(i, j, width, height, pos):
 	shape.shape = rect_shape
 	area.add_child(shape)
 	#area.position = pos - Vector2(width*0.3, height*0.3) + Vector2(width*0.5, height*0.5)
-	area.position = pos - Vector2(width*0.82, height*0.82)
+	area.position = pos 
 	area.name = "celda_" + str(i) + "_" + str(j)
 	area.collision_layer = 2
 	area.collision_mask = 1
