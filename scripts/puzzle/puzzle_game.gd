@@ -2,7 +2,10 @@ extends Node
 
 var base_size = Vector2i(960, 540) 
 
+@onready var game_timer = $GameTimer
+@onready var timer_label = $TimerLabel
 @onready var pieces_show = $"."
+
 var puzzle: Sprite2D = null
 var PIECE_SIZE = null
 # Called when the node enters the scene tree for the first time.
@@ -35,8 +38,17 @@ func _ready():
 				var rngy = rng.randf()
 				place_blue_piece.rpc(i, j, n, rngx, rngy)
 				place_orange_piece.rpc(i, j, n, rngx, rngy)
+	set_timer.rpc()
 
-
+func _process(_delta):
+	if game_timer.is_stopped():
+		timer_label.text = "00:00"
+		return
+	
+	var time_left = game_timer.time_left
+	var minutes = int(time_left / float(60))
+	var seconds = int(int(time_left) % 60)
+	timer_label.text = "%02d:%02d" % [minutes, seconds]
 
 func piece_places_setup(i, j, width, height, pos):
 	var area = Area2D.new()
@@ -160,3 +172,17 @@ func check_piece_superposition(p1_pos, p2_pos):
 	var height_on_range_l = (p2_pos[1]-deltay <= p1_pos[1]+deltay and p1_pos[1]+deltay <= p2_pos[1]+deltay) and (p1_pos[1]-deltay <= p2_pos[1]-deltay and p2_pos[1]-deltay <= p1_pos[1]+deltay)
 	var height_on_range_r = (p2_pos[1]-deltay <= p1_pos[1]-deltay and p1_pos[1]-deltay <= p2_pos[1]+deltay) and (p1_pos[1]-deltay <= p2_pos[1]+deltay and p2_pos[1]+deltay <= p1_pos[1]+deltay)
 	return (width_on_range_l or width_on_range_r) and (height_on_range_l or height_on_range_r)
+
+
+@rpc("any_peer", "call_local", "reliable")
+func set_timer():
+	game_timer.one_shot = true
+	#game_timer.autostart = true
+	game_timer.timeout.connect(_on_GameTimer_timeout)
+	game_timer.start(PuzzleSettings.PUZZLE_PIECES) #* PuzzleSettings.PUZZLE_PIECES * 60)
+
+func _on_GameTimer_timeout():
+	print("¡Tiempo agotado! Has perdido el juego.")
+	get_tree().change_scene_to_file("res://scenes/victory/GameOverScene.tscn")
+	# Aquí puedes agregar cualquier lógica adicional para manejar la derrota.
+	# Por ejemplo, mostrar un mensaje, cambiar a una pantalla de menú, etc.
