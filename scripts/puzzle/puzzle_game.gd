@@ -179,7 +179,7 @@ func set_timer():
 	game_timer.one_shot = true
 	#game_timer.autostart = true
 	game_timer.timeout.connect(_on_GameTimer_timeout)
-	game_timer.start(PuzzleSettings.PUZZLE_PIECES) #* PuzzleSettings.PUZZLE_PIECES * 60)
+	game_timer.start(PuzzleSettings.PUZZLE_PIECES*1000) #* PuzzleSettings.PUZZLE_PIECES * 60)
 
 func _on_GameTimer_timeout():
 	print("¡Tiempo agotado! Has perdido el juego.")
