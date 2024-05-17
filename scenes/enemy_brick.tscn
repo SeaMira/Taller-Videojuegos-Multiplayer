@@ -1,0 +1,10 @@
+[gd_scene load_steps=2 format=3 uid="uid://6rpxbuilpls5"]
+
+[ext_resource type="Texture2D" uid="uid://25b4jmpeg5nd" path="res://assets/ladrillo.png" id="1_jsa08"]
+
+[node name="EnemyBrick" type="Node2D"]
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture_filter = 1
+position = Vector2(2.25, 0.5)
+texture = ExtResource("1_jsa08")
