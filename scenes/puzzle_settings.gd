@@ -5,6 +5,8 @@ var PUZZLE_PIECES = null
 var orange_pieces: Array[PuzzlePieceData] = []
 var blue_pieces: Array[PuzzlePieceData] = []
 var PUZZLE_SCALE = null
+var PIECE_WIDTH = null
+var PIECE_HEIGHT = null
 
 enum Rotation {
 	UP,
