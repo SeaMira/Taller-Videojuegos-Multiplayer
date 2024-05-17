@@ -1,7 +1,10 @@
-[gd_scene load_steps=3 format=3 uid="uid://bgr4becwcv71e"]
+[gd_scene load_steps=5 format=3 uid="uid://bgr4becwcv71e"]
 
 [ext_resource type="Theme" uid="uid://bcr82ieiusuu8" path="res://resources/margin_container_margins.tres" id="1_coxps"]
 [ext_resource type="Script" path="res://scripts/puzzle/image_selection_gui.gd" id="2_q622s"]
+[ext_resource type="Texture2D" uid="uid://bctw7p0m8ow4m" path="res://assets/selection_background.png" id="3_pcv41"]
+
+[sub_resource type="Theme" id="Theme_2yi6j"]
 
 [node name="ImageSelectionGui" type="MarginContainer"]
 anchors_preset = 15
@@ -16,10 +19,19 @@ size_flags_vertical = 4
 theme = ExtResource("1_coxps")
 script = ExtResource("2_q622s")
 
+[node name="background" type="Sprite2D" parent="."]
+modulate = Color(0.831373, 0.831373, 0.831373, 1)
+position = Vector2(480, 270)
+texture = ExtResource("3_pcv41")
+region_enabled = true
+region_rect = Rect2(0, 448, 1024, 576)
+
 [node name="PanelContainer" type="PanelContainer" parent="."]
+self_modulate = Color(0, 0, 0, 1)
 layout_mode = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
+theme = SubResource("Theme_2yi6j")
 
 [node name="MarginContainer" type="MarginContainer" parent="PanelContainer"]
 layout_mode = 2
