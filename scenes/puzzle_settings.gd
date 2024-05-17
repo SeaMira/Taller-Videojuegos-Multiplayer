@@ -63,5 +63,5 @@ func clean_by_ids(x, y):
 			blue_pieces.remove_at(i)
 			b_ok = true
 	if (blue_pieces.size() == 0 and orange_pieces.size() == 0):
-		get_tree().change_scene_to_file("res://scenes/victory/GameOverScene.tscn")
+		get_tree().change_scene_to_file("res://scenes/victory/VictoryScene.tscn")
 

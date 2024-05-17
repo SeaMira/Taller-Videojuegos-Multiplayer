@@ -183,6 +183,6 @@ func set_timer():
 
 func _on_GameTimer_timeout():
 	print("¡Tiempo agotado! Has perdido el juego.")
-	get_tree().change_scene_to_file("res://scenes/victory/GameOverScene.tscn")
+	get_tree().change_scene_to_file("res://scenes/game_over/GameOverScene.tscn")
 	# Aquí puedes agregar cualquier lógica adicional para manejar la derrota.
 	# Por ejemplo, mostrar un mensaje, cambiar a una pantalla de menú, etc.
