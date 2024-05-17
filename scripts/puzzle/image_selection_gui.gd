@@ -12,8 +12,9 @@ var image_extensions = ["png", "jpg"]
 var IMAGE = null
 var PUZZLE_PIECES = 4
 
-var status = {  }
+var status = {}
 var images = {}
+var pieces_amount_selection = {}
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
@@ -34,6 +35,8 @@ func _ready():
 	option_button.set_item_metadata(2, 6)
 	option_button.select(0)
 	option_button.item_selected.connect(self._option_selected)
+	
+	save_pieces_amount.rpc(multiplayer.get_unique_id(), 4)
 	
 	### file dialog setting
 	file_dialog.file_mode = 0
@@ -81,11 +84,15 @@ func _file_selected(path):
 		
 @rpc("reliable", "any_peer", "call_local")
 func save_image(id, image_data, extension):
-	
 	images[id] = [image_data, extension]
+	
+@rpc("reliable", "any_peer", "call_local")
+func save_pieces_amount(id, amount):
+	pieces_amount_selection[id] = amount
 		
 func _option_selected(index):
 	var pieces_amount = option_button.get_item_metadata(index)
+	save_pieces_amount.rpc(multiplayer.get_unique_id(), pieces_amount)
 	PUZZLE_PIECES = pieces_amount
 	print("piezas ", pieces_amount)
 	#change_status.rpc(multiplayer.get_unique_id())
@@ -176,7 +183,8 @@ func setting_puzzle(image_player):
 	PuzzleSettings.PUZZLE_SCALE = Vector2(scale_x, scale_y)
 	
 	PuzzleSettings.PUZZLE_IMAGE = image_texture
-	PuzzleSettings.PUZZLE_PIECES = PUZZLE_PIECES
+	PuzzleSettings.PUZZLE_PIECES = pieces_amount_selection[image_player]
+	PUZZLE_PIECES = pieces_amount_selection[image_player]
 	
 	var piece_width = target_width / PUZZLE_PIECES
 	var piece_height = target_height / PUZZLE_PIECES
