@@ -11,6 +11,9 @@ var player_id: int
 func _ready() -> void:
 	player_role.hide()
 	ready_texture.hide()
+	var fnt = load("res://assets/fonts/joystix/joystix monospace.otf")
+	player_name.add_theme_font_override("font", fnt)
+	player_role.add_theme_font_override("font", fnt)
 
 
 func setup(player: Statics.PlayerData) -> void:
@@ -37,10 +40,10 @@ func _set_player_name(value: String) -> void:
 func _set_player_role(value: Statics.Role) -> void:
 	player_role.visible = value != Statics.Role.NONE
 	match value:
-		Statics.Role.ROLE_A:
-			player_role.text = "Role A"
-		Statics.Role.ROLE_B:
-			player_role.text = "Role B"
+		Statics.Role.BLUE:
+			player_role.text = "Blue"
+		Statics.Role.ORANGE:
+			player_role.text = "Orange"
 
 
 func set_ready(value: bool) -> void:

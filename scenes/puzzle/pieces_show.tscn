@@ -1,28 +1,27 @@
-[gd_scene load_steps=5 format=3 uid="uid://bgep6mktob6sp"]
+[gd_scene load_steps=4 format=3 uid="uid://bgep6mktob6sp"]
 
 [ext_resource type="Script" path="res://scripts/puzzle/puzzle_game.gd" id="1_yysc1"]
-[ext_resource type="Texture2D" uid="uid://tw8t38ns0seh" path="res://icon.svg" id="2_p1n2r"]
-
-[sub_resource type="CanvasItemMaterial" id="CanvasItemMaterial_4l6ti"]
-
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_wg4xu"]
+[ext_resource type="Texture2D" uid="uid://ojker2x4wocn" path="res://assets/TimerBack.png" id="2_fyvrv"]
+[ext_resource type="FontFile" uid="uid://durkid6h8al5f" path="res://assets/fonts/joystix/joystix monospace.otf" id="3_f4cy7"]
 
 [node name="PiecesShow" type="Node2D" groups=["blue", "orange"]]
 script = ExtResource("1_yysc1")
 
-[node name="RigidBody2D" type="RigidBody2D" parent="."]
-collision_layer = 0
-collision_mask = 0
+[node name="GameTimer" type="Timer" parent="."]
 
-[node name="Sprite2D" type="Sprite2D" parent="RigidBody2D"]
-material = SubResource("CanvasItemMaterial_4l6ti")
-texture = ExtResource("2_p1n2r")
+[node name="Sprite2D" type="Sprite2D" parent="."]
+position = Vector2(100, 270)
+scale = Vector2(3.0625, 1.78125)
+texture = ExtResource("2_fyvrv")
 region_enabled = true
-region_rect = Rect2(64, 64, 34, 22)
+region_rect = Rect2(0, 96, 48, 32)
 
-[node name="Sprite2D2" type="TextureRect" parent="RigidBody2D/Sprite2D"]
-offset_right = 1.0
-offset_bottom = 1.0
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="RigidBody2D"]
-shape = SubResource("RectangleShape2D_wg4xu")
+[node name="TimerLabel" type="Label" parent="."]
+z_index = 4
+offset_left = 28.0
+offset_top = 241.0
+offset_right = 174.0
+offset_bottom = 299.0
+theme_override_fonts/font = ExtResource("3_f4cy7")
+horizontal_alignment = 1
+vertical_alignment = 1

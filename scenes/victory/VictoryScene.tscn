@@ -1,0 +1,16 @@
+[gd_scene load_steps=3 format=3 uid="uid://dn6tfwnxeqdjv"]
+
+[ext_resource type="Script" path="res://scripts/victory/VictoryScene.gd" id="1_0usub"]
+[ext_resource type="Texture2D" uid="uid://tmm5hy4pglo0" path="res://assets/victory.png" id="2_1kx87"]
+
+[node name="VictoryScene" type="Node2D"]
+script = ExtResource("1_0usub")
+
+[node name="Background" type="Sprite2D" parent="."]
+position = Vector2(480, 270)
+scale = Vector2(0.85, 0.6)
+texture = ExtResource("2_1kx87")
+region_enabled = true
+region_rect = Rect2(320, 8, 1152, 1008)
+
+[node name="ToMenuTimer" type="Timer" parent="."]

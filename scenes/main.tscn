@@ -398,7 +398,7 @@ layer_1/tile_data = PackedInt32Array(2162688, 1, 2, 2097152, 1, 1, 2031616, 1, 1
 [node name="Inventory" type="CanvasLayer" parent="."]
 
 [node name="BlueBox" type="Sprite2D" parent="Inventory" groups=["blue"]]
-position = Vector2(103, 105)
+position = Vector2(100, 105)
 scale = Vector2(11, 11)
 texture = ExtResource("5_186ka")
 script = ExtResource("6_jsrp1")
@@ -407,7 +407,7 @@ script = ExtResource("6_jsrp1")
 
 [node name="OrangeBox" type="Sprite2D" parent="Inventory" groups=["orange"]]
 texture_filter = 1
-position = Vector2(104, 441)
+position = Vector2(100, 441)
 scale = Vector2(11, 11)
 texture = ExtResource("7_qod55")
 script = ExtResource("6_jsrp1")
@@ -432,31 +432,25 @@ collision_mask = 0
 [node name="CollisionShape2D" type="CollisionShape2D" parent="ImageBorders/PlayerBorder"]
 position = Vector2(193, 112)
 shape = SubResource("SegmentShape2D_61gku")
-disabled = true
 
 [node name="CollisionShape2D2" type="CollisionShape2D" parent="ImageBorders/PlayerBorder"]
 position = Vector2(765, 112)
 shape = SubResource("SegmentShape2D_61gku")
-disabled = true
 
 [node name="CollisionShape2D3" type="CollisionShape2D" parent="ImageBorders/PlayerBorder"]
 shape = SubResource("SegmentShape2D_4ds4d")
-disabled = true
 
 [node name="CollisionShape2D4" type="CollisionShape2D" parent="ImageBorders/PlayerBorder"]
 position = Vector2(0, -318)
 shape = SubResource("SegmentShape2D_4ds4d")
-disabled = true
 
 [node name="CollisionShape2D5" type="CollisionShape2D" parent="ImageBorders/PlayerBorder"]
 position = Vector2(193, 272)
 shape = SubResource("SegmentShape2D_pve80")
-disabled = true
 
 [node name="CollisionShape2D6" type="CollisionShape2D" parent="ImageBorders/PlayerBorder"]
 position = Vector2(959, 272)
 shape = SubResource("SegmentShape2D_pve80")
-disabled = true
 
 [node name="ProjectileBorder" type="StaticBody2D" parent="ImageBorders"]
 collision_layer = 32
@@ -465,22 +459,18 @@ collision_mask = 0
 [node name="CollisionShape2D5" type="CollisionShape2D" parent="ImageBorders/ProjectileBorder"]
 position = Vector2(193, 112)
 shape = SubResource("SegmentShape2D_exgur")
-disabled = true
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="ImageBorders/ProjectileBorder"]
 position = Vector2(765, 112)
 shape = SubResource("SegmentShape2D_urg4t")
-disabled = true
 
 [node name="CollisionShape2D2" type="CollisionShape2D" parent="ImageBorders/ProjectileBorder"]
 position = Vector2(0, 30)
 shape = SubResource("SegmentShape2D_767u8")
-disabled = true
 
 [node name="CollisionShape2D3" type="CollisionShape2D" parent="ImageBorders/ProjectileBorder"]
 position = Vector2(0, -348)
 shape = SubResource("SegmentShape2D_bsgxf")
-disabled = true
 
 [node name="ShootingZone" type="Node2D" parent="."]
 

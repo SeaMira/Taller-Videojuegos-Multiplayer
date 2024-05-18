@@ -74,10 +74,12 @@ func send_data(pos: Vector2, vel: Vector2):
 func _on_area_2d_body_entered(body):
 	#if body.is_in_group('orange'):
 	pieces_on_area.append(body)
+	print(pieces_on_area)
 	
 func _on_area_2d_body_exited(body):
 	#if body.is_in_group('orange') and body in pieces_on_area:
 	pieces_on_area.erase(body)
+	print(pieces_on_area)
 
 @rpc("authority", "call_local", "reliable")
 func grab_piece_action():
@@ -85,10 +87,12 @@ func grab_piece_action():
 	var max_z_piece = null
 	if pieces_on_area.size() > 0:
 		for item in pieces_on_area:
+			#print(item.z_index)
 			if item.z_index >= max_z:
 				max_z = item.z_index
 				max_z_piece = item
 		
+	#print(max_z)
 	if max_z_piece != null:
 		max_z_piece.reparent(player)
 		max_z_piece.global_position.x += 20
@@ -106,7 +110,7 @@ func grab_piece_action():
 			orange_piece.region_rect = Rect2(piece_index[1] * w, piece_index[0] * h, w, h)
 			orange_piece.texture = piece_texture
 			orange_piece.scale.y = PuzzleSettings.PUZZLE_SCALE[1] / 10
-			orange_piece.scale.x = PuzzleSettings.PUZZLE_SCALE[0] / 10
+			orange_piece.scale.x = PuzzleSettings.PUZZLE_SCALE[0] / 12
 		
 		elif player.is_in_group('blue'):
 			var piece_texture = piece_grabbed.get_child(0).texture
@@ -119,11 +123,12 @@ func grab_piece_action():
 			blue_piece.region_rect = Rect2(piece_index[1] * w, piece_index[0] * h, w, h)
 			blue_piece.texture = piece_texture
 			blue_piece.scale.y = PuzzleSettings.PUZZLE_SCALE[1] / 10
-			blue_piece.scale.x = PuzzleSettings.PUZZLE_SCALE[0] / 10
+			blue_piece.scale.x = PuzzleSettings.PUZZLE_SCALE[0] / 12
 
 @rpc("authority", "call_local", "reliable")
 func free_piece_action():
 	if piece_grabbed != null:
+		print("dropped")
 		piece_grabbed.reparent(get_tree().get_root().get_node("/root/Main/PiecesShow"))
 		piece_grabbed = null
 	

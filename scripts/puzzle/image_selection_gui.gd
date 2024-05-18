@@ -211,6 +211,10 @@ func new_piece_body(image_texture, i, j, texture_width, texture_height, scale_x,
 	var text_width_ppp = base_size.x*0.6/10
 	#var text_height_ppp = texture_height/PUZZLE_PIECES
 	var text_height_ppp = base_size.y*0.6/10
+	
+	PuzzleSettings.PIECE_WIDTH = text_width_ppp
+	PuzzleSettings.PIECE_HEIGHT = text_height_ppp
+	
 	piece_sprite.region_rect = Rect2(i * texture_width/PUZZLE_PIECES, j * texture_height/PUZZLE_PIECES, texture_width/PUZZLE_PIECES, texture_height/PUZZLE_PIECES)
 	piece_sprite.scale = Vector2(scale_x/pow(10, 0.5), scale_y/pow(10, 0.5))
 	

@@ -2,7 +2,10 @@ extends Node
 
 var base_size = Vector2i(960, 540) 
 
+@onready var game_timer = $GameTimer
+@onready var timer_label = $TimerLabel
 @onready var pieces_show = $"."
+
 var puzzle: Sprite2D = null
 var PIECE_SIZE = null
 # Called when the node enters the scene tree for the first time.
@@ -17,7 +20,6 @@ func _ready():
 	add_child(puzzle)
 	
 	
-	var start_position = Vector2(50, 50) # Posición inicial de la cuadrícula
 	var margin = 0 # Margen entre piezas
 	var piece_size = base_size * (0.6/PuzzleSettings.PUZZLE_PIECES) # Asume un tamaño fijo para las piezas
 	PIECE_SIZE = piece_size
@@ -35,8 +37,17 @@ func _ready():
 				var rngy = rng.randf()
 				place_blue_piece.rpc(i, j, n, rngx, rngy)
 				place_orange_piece.rpc(i, j, n, rngx, rngy)
+	set_timer.rpc()
 
-
+func _process(_delta):
+	if game_timer.is_stopped():
+		timer_label.text = "00:00"
+		return
+	
+	var time_left = game_timer.time_left
+	var minutes = int(time_left / float(60))
+	var seconds = int(int(time_left) % 60)
+	timer_label.text = "%02d:%02d" % [minutes, seconds]
 
 func piece_places_setup(i, j, width, height, pos):
 	var area = Area2D.new()
@@ -89,8 +100,12 @@ func place_orange_piece(i, j, n, rngx, rngy):
 func _on_cell_body_entered(body, area):
 	if is_multiplayer_authority():
 		var bodies = area.get_overlapping_bodies()
-		if body.is_in_group("blue") and !(body is CharacterBody2D):
+		if body.is_in_group("blue") and (body is RigidBody2D):
+			print(body, multiplayer.get_unique_id())
 			var indxs = PuzzleSettings.search_blue_piece(body)
+			if !(indxs):
+				var splitted = body.name.split("_")
+				indxs = Vector2(float(splitted[1]), float(splitted[2]))
 			var body_name = "celda_" + str(indxs.x) + "_" + str(indxs.y)
 			#print("body name", body_name, area.name)
 			if area.name == body_name:
@@ -100,11 +115,16 @@ func _on_cell_body_entered(body, area):
 						if b.is_in_group("orange"):
 							var indxs2 = PuzzleSettings.search_orange_piece(b)
 							var b_name = "celda_" + str(indxs2.x) + "_" + str(indxs2.y)
-							#print(b_name, body_name)
-							if body_name == b_name:
+							print(body.transform[2], b.transform[2], PIECE_SIZE)
+							if body_name == b_name and check_piece_superposition(body.transform[2], b.transform[2]):
 								prueba.rpc(area.name)
-		elif body.is_in_group("orange") and !(body is CharacterBody2D):
+								
+		elif body.is_in_group("orange") and (body is RigidBody2D):
+			print(body, multiplayer.get_unique_id())
 			var indxs = PuzzleSettings.search_orange_piece(body)
+			if !(indxs):
+				var splitted = body.name.split("_")
+				indxs = Vector2(float(splitted[1]), float(splitted[2]))
 			var body_name = "celda_" + str(indxs.x) + "_" + str(indxs.y)
 			#print("body name", body_name, area.name)
 			if area.name == body_name:
@@ -114,8 +134,8 @@ func _on_cell_body_entered(body, area):
 						if b.is_in_group("blue"):
 							var indxs2 = PuzzleSettings.search_blue_piece(b)
 							var b_name = "celda_" + str(indxs2.x) + "_" + str(indxs2.y)
-							#print(b_name, body_name)
-							if body_name == b_name:
+							print(body.transform[2], b.transform[2], PuzzleSettings.PIECE_WIDTH, PuzzleSettings.PIECE_HEIGHT)
+							if body_name == b_name and check_piece_superposition(body.transform[2], b.transform[2]):
 								prueba.rpc(area.name)
 		
 @rpc("any_peer", "call_local", "reliable")
@@ -142,3 +162,25 @@ func place_piece_image(x, y):
 	var offsety = ((x- (int((PuzzleSettings.PUZZLE_PIECES)/2)))*h + h/2)*PuzzleSettings.PUZZLE_SCALE.y
 	piece.position = base_size/2 + Vector2i(offsetx, offsety)
 	add_child(piece)
+	
+func check_piece_superposition(p1_pos, p2_pos):
+	var deltax = PuzzleSettings.PIECE_WIDTH/2
+	var deltay = PuzzleSettings.PIECE_HEIGHT/2
+	var width_on_range_l = (p2_pos[0]-deltax <= p1_pos[0]+deltax and p1_pos[0]+deltax <= p2_pos[0]+deltax) and (p1_pos[0]-deltax <= p2_pos[0]-deltax and p2_pos[0]-deltax <= p1_pos[0]+deltax)
+	var width_on_range_r = (p2_pos[0]-deltax <= p1_pos[0]-deltax and p1_pos[0]-deltax <= p2_pos[0]+deltax) and (p1_pos[0]-deltax <= p2_pos[0]+deltax and p2_pos[0]+deltax <= p1_pos[0]+deltax)
+	var height_on_range_l = (p2_pos[1]-deltay <= p1_pos[1]+deltay and p1_pos[1]+deltay <= p2_pos[1]+deltay) and (p1_pos[1]-deltay <= p2_pos[1]-deltay and p2_pos[1]-deltay <= p1_pos[1]+deltay)
+	var height_on_range_r = (p2_pos[1]-deltay <= p1_pos[1]-deltay and p1_pos[1]-deltay <= p2_pos[1]+deltay) and (p1_pos[1]-deltay <= p2_pos[1]+deltay and p2_pos[1]+deltay <= p1_pos[1]+deltay)
+	return (width_on_range_l or width_on_range_r) and (height_on_range_l or height_on_range_r)
+
+
+@rpc("any_peer", "call_local", "reliable")
+func set_timer():
+	game_timer.one_shot = true
+	
+	game_timer.timeout.connect(_on_GameTimer_timeout)
+	game_timer.start(PuzzleSettings.PUZZLE_PIECES*1000) #* PuzzleSettings.PUZZLE_PIECES * 60)
+
+func _on_GameTimer_timeout():
+	print("¡Tiempo agotado! Has perdido el juego.")
+	get_tree().change_scene_to_file("res://scenes/game_over/GameOverScene.tscn")
+	
