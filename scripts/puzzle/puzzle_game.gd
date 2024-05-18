@@ -20,7 +20,6 @@ func _ready():
 	add_child(puzzle)
 	
 	
-	var start_position = Vector2(50, 50) # Posición inicial de la cuadrícula
 	var margin = 0 # Margen entre piezas
 	var piece_size = base_size * (0.6/PuzzleSettings.PUZZLE_PIECES) # Asume un tamaño fijo para las piezas
 	PIECE_SIZE = piece_size
@@ -177,12 +176,11 @@ func check_piece_superposition(p1_pos, p2_pos):
 @rpc("any_peer", "call_local", "reliable")
 func set_timer():
 	game_timer.one_shot = true
-	#game_timer.autostart = true
+	
 	game_timer.timeout.connect(_on_GameTimer_timeout)
 	game_timer.start(PuzzleSettings.PUZZLE_PIECES*1000) #* PuzzleSettings.PUZZLE_PIECES * 60)
 
 func _on_GameTimer_timeout():
 	print("¡Tiempo agotado! Has perdido el juego.")
 	get_tree().change_scene_to_file("res://scenes/game_over/GameOverScene.tscn")
-	# Aquí puedes agregar cualquier lógica adicional para manejar la derrota.
-	# Por ejemplo, mostrar un mensaje, cambiar a una pantalla de menú, etc.
+	
