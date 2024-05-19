@@ -9,7 +9,7 @@
 [ext_resource type="Texture2D" uid="uid://krt2y0sagms" path="res://assets/orange_box.png" id="7_qod55"]
 [ext_resource type="Texture2D" uid="uid://cw1tfsm6qxare" path="res://assets/blue_area.png" id="8_iuh72"]
 [ext_resource type="Texture2D" uid="uid://dhldreuuf420u" path="res://assets/orange_area.png" id="9_bxcei"]
-[ext_resource type="PackedScene" uid="uid://6rpxbuilpls5" path="res://scenes/enemy_brick.tscn" id="10_upp0c"]
+[ext_resource type="Script" path="res://scenes/EnemyBricksSpawner.gd" id="10_n3l74"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_w68u3"]
 texture = ExtResource("2_0yjug")
@@ -496,7 +496,5 @@ position = Vector2(479.5, 444)
 scale = Vector2(35.8125, 1.625)
 texture = ExtResource("9_bxcei")
 
-[node name="BricksSpawner" type="MultiplayerSpawner" parent="."]
-spawn_path = NodePath("../EnemyBrick")
-
-[node name="EnemyBrick" parent="." instance=ExtResource("10_upp0c")]
+[node name="EnemyBricksSpawner" type="Node" parent="."]
+script = ExtResource("10_n3l74")

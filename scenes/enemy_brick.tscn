@@ -1,10 +1,19 @@
-[gd_scene load_steps=2 format=3 uid="uid://6rpxbuilpls5"]
+[gd_scene load_steps=4 format=3 uid="uid://6rpxbuilpls5"]
 
+[ext_resource type="Script" path="res://scenes/enemy_brick.gd" id="1_imgno"]
 [ext_resource type="Texture2D" uid="uid://25b4jmpeg5nd" path="res://assets/ladrillo.png" id="1_jsa08"]
 
-[node name="EnemyBrick" type="Node2D"]
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_d6a76"]
+size = Vector2(448, 482)
+
+[node name="EnemyBrick" type="StaticBody2D"]
+script = ExtResource("1_imgno")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 texture_filter = 1
 position = Vector2(2.25, 0.5)
 texture = ExtResource("1_jsa08")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(3, 0)
+shape = SubResource("RectangleShape2D_d6a76")

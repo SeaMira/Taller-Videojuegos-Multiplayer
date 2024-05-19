@@ -27,6 +27,7 @@ func _ready() -> void:
 	
 	var puzzle_instance = puzzle_scene.instantiate()
 	add_child(puzzle_instance)
+	
 
 
 func _on_player_fired(bullet):
