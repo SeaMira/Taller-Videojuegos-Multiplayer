@@ -19,9 +19,6 @@ signal fired(bullet)
 var blue_piece
 var orange_piece
 
-@export var flying_bullet = false :
-	set(value):
-		flying_bullet = value
 @export var score = 1 :
 	set(value):
 		score = value
@@ -46,6 +43,8 @@ func _physics_process(delta):
 	if is_multiplayer_authority():
 		if Input.is_action_just_pressed("fire"):
 			fire.rpc_id(1, get_global_mouse_position())
+	if Input.is_action_just_pressed("position"):
+		print(get_global_mouse_position())
 
 
 	if grab_piece and not with_piece:
@@ -75,12 +74,12 @@ func send_data(pos: Vector2, vel: Vector2):
 func _on_area_2d_body_entered(body):
 	#if body.is_in_group('orange'):
 	pieces_on_area.append(body)
-	#print(pieces_on_area)
+	print(pieces_on_area)
 	
 func _on_area_2d_body_exited(body):
 	#if body.is_in_group('orange') and body in pieces_on_area:
 	pieces_on_area.erase(body)
-	#print(pieces_on_area)
+	print(pieces_on_area)
 
 @rpc("authority", "call_local", "reliable")
 func grab_piece_action():
@@ -127,42 +126,23 @@ func grab_piece_action():
 			blue_piece.scale.x = PuzzleSettings.PUZZLE_SCALE[0] / 12
 
 @rpc("authority", "call_local", "reliable")
-func remove_bullets_action():
-	var bullets_node = get_tree().get_root().get_node("/root/Main/Bullets")
-	var bullets = bullets_node.get_children()
-	for bullet in bullets:
-		bullets_node.remove_child(bullet)
-	var players = get_tree().get_root().get_node("/root/Main/Players").get_children()
-	players[0].flying_bullet = false
-	players[1].flying_bullet = false
-	piece_grabbed = null
-	
-	if player.is_in_group('orange'):
-			orange_piece.texture = null
-		
-	elif player.is_in_group('blue'):
-		blue_piece.texture = null
-
-@rpc("authority", "call_local", "reliable")
 func free_piece_action():
 	if piece_grabbed != null:
 		print("dropped")
 		piece_grabbed.reparent(get_tree().get_root().get_node("/root/Main/PiecesShow"))
-		remove_bullets_action()
+		piece_grabbed = null
+	
+		if player.is_in_group('orange'):
+			orange_piece.texture = null
+		
+		elif player.is_in_group('blue'):
+			blue_piece.texture = null
 
 @rpc("call_local")
 func fire(mouse_pos):
-	if piece_grabbed != null and !flying_bullet:
-		flying_bullet = true
-		var bullet_inst = bullet_scene.instantiate()
-		var group = null
-		if player.is_in_group("orange"):
-			bullet_inst.set_group("orange")
-		else:
-			bullet_inst.set_group("blue")
-		bullet_inst.set_velocity(global_position.direction_to(mouse_pos) * 200)
-		bullet_inst.global_position = global_position
-		bullet_inst.set_name(piece_grabbed.name)
-		fired.emit(bullet_inst)
+	var bullet_inst = bullet_scene.instantiate()
+	bullet_inst.set_velocity(global_position.direction_to(mouse_pos) * 200)
+	bullet_inst.global_position = global_position
+	fired.emit(bullet_inst)
 
 

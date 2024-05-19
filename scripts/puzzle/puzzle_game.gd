@@ -60,7 +60,7 @@ func piece_places_setup(i, j, width, height, pos):
 	area.position = pos 
 	area.name = "celda_" + str(i) + "_" + str(j)
 	area.collision_layer = 2
-	area.collision_mask = 8
+	area.collision_mask = 1
 	area.body_entered.connect(_on_cell_body_entered.bind(area))
 	add_child(area) # Asegúrate de que este script esté adjunto a un nodo que pueda ser padre de Area2D
 
@@ -100,8 +100,8 @@ func place_orange_piece(i, j, n, rngx, rngy):
 func _on_cell_body_entered(body, area):
 	if is_multiplayer_authority():
 		var bodies = area.get_overlapping_bodies()
-		if body.is_in_group("blue") and (body is CharacterBody2D):
-			#print(body, multiplayer.get_unique_id())
+		if body.is_in_group("blue") and (body is RigidBody2D):
+			print(body, multiplayer.get_unique_id())
 			var indxs = PuzzleSettings.search_blue_piece(body)
 			if !(indxs):
 				var splitted = body.name.split("_")
@@ -114,17 +114,13 @@ func _on_cell_body_entered(body, area):
 					for b in bodies:
 						if b.is_in_group("orange"):
 							var indxs2 = PuzzleSettings.search_orange_piece(b)
-							if !(indxs2):
-								var splitted2 = b.name.split("_")
-								indxs2 = Vector2(float(splitted2[1]), float(splitted2[2]))
 							var b_name = "celda_" + str(indxs2.x) + "_" + str(indxs2.y)
-							#print(body.transform[2], b.transform[2], PIECE_SIZE)
-							print(body_name, b_name)
+							print(body.transform[2], b.transform[2], PIECE_SIZE)
 							if body_name == b_name and check_piece_superposition(body.transform[2], b.transform[2]):
 								prueba.rpc(area.name)
 								
-		elif body.is_in_group("orange") and (body is CharacterBody2D):
-			#print(body, multiplayer.get_unique_id())
+		elif body.is_in_group("orange") and (body is RigidBody2D):
+			print(body, multiplayer.get_unique_id())
 			var indxs = PuzzleSettings.search_orange_piece(body)
 			if !(indxs):
 				var splitted = body.name.split("_")
@@ -137,12 +133,8 @@ func _on_cell_body_entered(body, area):
 					for b in bodies:
 						if b.is_in_group("blue"):
 							var indxs2 = PuzzleSettings.search_blue_piece(b)
-							if !(indxs2):
-								var splitted2 = b.name.split("_")
-								indxs2 = Vector2(float(splitted2[1]), float(splitted2[2]))
 							var b_name = "celda_" + str(indxs2.x) + "_" + str(indxs2.y)
-							print(body_name, b_name)
-							#print(body.transform[2], b.transform[2], PuzzleSettings.PIECE_WIDTH, PuzzleSettings.PIECE_HEIGHT)
+							print(body.transform[2], b.transform[2], PuzzleSettings.PIECE_WIDTH, PuzzleSettings.PIECE_HEIGHT)
 							if body_name == b_name and check_piece_superposition(body.transform[2], b.transform[2]):
 								prueba.rpc(area.name)
 		
@@ -151,7 +143,7 @@ func prueba(area_name):
 	var idxs = area_name.split("_")
 	var x = int(idxs[1])
 	var y = int(idxs[2])
-	print(x, y, "prueba")
+	print(x, y)
 	place_piece_image(x, y)
 	PuzzleSettings.clean_by_ids(x, y)
 	#print("tariamo entonce")
@@ -170,8 +162,6 @@ func place_piece_image(x, y):
 	var offsety = ((x- (int((PuzzleSettings.PUZZLE_PIECES)/2)))*h + h/2)*PuzzleSettings.PUZZLE_SCALE.y
 	piece.position = base_size/2 + Vector2i(offsetx, offsety)
 	add_child(piece)
-	get_tree().get_root().get_node("/root/Main/Players/").get_child(0).remove_bullets_action.rpc()
-	
 	
 func check_piece_superposition(p1_pos, p2_pos):
 	var deltax = PuzzleSettings.PIECE_WIDTH/2

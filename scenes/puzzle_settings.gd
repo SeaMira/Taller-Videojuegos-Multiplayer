@@ -36,13 +36,13 @@ class PuzzlePieceData:
 		}
 
 
-func search_blue_piece(piece: CharacterBody2D):
+func search_blue_piece(piece: RigidBody2D):
 	for p in blue_pieces:
 		var n = p.body.name
 		if n == piece.name:
 			return Vector2(p.idx, p.idy)
 			
-func search_orange_piece(piece: CharacterBody2D):
+func search_orange_piece(piece: RigidBody2D):
 	for p in orange_pieces:
 		var n = p.body.name
 		if n == piece.name:
