@@ -95,9 +95,10 @@ func grab_piece_action():
 	#print(max_z)
 	if max_z_piece != null:
 		max_z_piece.reparent(player)
-		max_z_piece.global_position.x += 20
-		max_z_piece.global_position.y += 20
+		#max_z_piece.global_position.x += 20
+		#max_z_piece.global_position.y += 20
 		piece_grabbed = max_z_piece
+		piece_grabbed.hide()
 		
 		if player.is_in_group('orange'):
 			var piece_texture = piece_grabbed.get_child(0).texture
@@ -130,6 +131,7 @@ func free_piece_action():
 	if piece_grabbed != null:
 		print("dropped")
 		piece_grabbed.reparent(get_tree().get_root().get_node("/root/Main/PiecesShow"))
+		piece_grabbed.show()
 		piece_grabbed = null
 	
 		if player.is_in_group('orange'):
