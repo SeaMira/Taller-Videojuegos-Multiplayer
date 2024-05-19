@@ -15,6 +15,9 @@ properties/0/replication_mode = 2
 properties/1/path = NodePath(".:position")
 properties/1/spawn = true
 properties/1/replication_mode = 1
+properties/2/path = NodePath(".:flying_bullet")
+properties/2/spawn = true
+properties/2/replication_mode = 2
 
 [sub_resource type="Animation" id="Animation_0p1ys"]
 length = 0.001
