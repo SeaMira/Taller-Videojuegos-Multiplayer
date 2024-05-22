@@ -23,9 +23,11 @@ func spawn_bricks():
 			positions_taken.append(position_rand)
 			var i = position_rand[0]
 			var j = position_rand[1]
-			var position =  Vector2(j * (piece_size.x * scale_factor.x), i * (piece_size.y * scale_factor.y))
+			var position =  Vector2(j * ((piece_size.x * scale_factor.x)/2), i * ((piece_size.y * scale_factor.y)/2))
+			position -= piece_size/2
 			var v_pos = Vector2(base_size*(0.2)) + Vector2(piece_size/2)
 			sync_brick.rpc(position + v_pos, [i,j])
+		print(positions_taken)
 			
 @rpc("any_peer", "call_local", "reliable")
 func sync_brick(move_position, coords):
@@ -33,13 +35,14 @@ func sync_brick(move_position, coords):
 	brick.name = 'brick_' + str(coords[0]) + '_' + str(coords[1])
 	add_child(brick)
 	brick.position = move_position
+	brick.positioned = true
 	
 func get_coords(positions_list, puzzle_dim):
 	while true:
 		var rng_i = RandomNumberGenerator.new()
 		var rng_j = RandomNumberGenerator.new()
-		var i = rng_i.randi_range(0, puzzle_dim - 1)
-		var j = rng_j.randi_range(0, puzzle_dim - 1)
+		var i = rng_i.randi_range(0, (puzzle_dim * 2) - 1)
+		var j = rng_j.randi_range(0, (puzzle_dim * 2) - 1)
 		if [i,j] not in positions_list:
 			return [i, j]
 		

@@ -1,0 +1,26 @@
+[gd_scene load_steps=5 format=3 uid="uid://bfjfhe80oby00"]
+
+[ext_resource type="Script" path="res://Projectile.gd" id="1_yv04f"]
+[ext_resource type="Texture2D" uid="uid://cwp31bchttmgv" path="res://assets/scissors.png" id="2_q50bn"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_r8i6x"]
+size = Vector2(1081, 1078)
+
+[sub_resource type="SceneReplicationConfig" id="SceneReplicationConfig_k6888"]
+properties/0/path = NodePath(".:position")
+properties/0/spawn = true
+properties/0/replication_mode = 1
+
+[node name="Projectile" type="CharacterBody2D"]
+scale = Vector2(0.1, 0.1)
+script = ExtResource("1_yv04f")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(13.5, -1)
+shape = SubResource("RectangleShape2D_r8i6x")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+texture = ExtResource("2_q50bn")
+
+[node name="MultiplayerSynchronizer" type="MultiplayerSynchronizer" parent="."]
+replication_config = SubResource("SceneReplicationConfig_k6888")

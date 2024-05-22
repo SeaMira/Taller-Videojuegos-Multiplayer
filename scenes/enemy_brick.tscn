@@ -7,13 +7,12 @@
 size = Vector2(448, 482)
 
 [node name="EnemyBrick" type="StaticBody2D"]
+texture_filter = 1
 script = ExtResource("1_imgno")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 texture_filter = 1
-position = Vector2(2.25, 0.5)
 texture = ExtResource("1_jsa08")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
-position = Vector2(3, 0)
 shape = SubResource("RectangleShape2D_d6a76")
