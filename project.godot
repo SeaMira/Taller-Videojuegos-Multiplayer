@@ -89,6 +89,7 @@ position={
 2d_physics/layer_4="Bullet"
 2d_physics/layer_5="PlayersWalls"
 2d_physics/layer_6="ProjectileWalls"
+2d_physics/layer_7="Projectiles"
 
 [rendering]
 

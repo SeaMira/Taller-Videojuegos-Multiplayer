@@ -42,7 +42,7 @@ func _physics_process(delta):
 	move_and_slide()
 	if is_multiplayer_authority():
 		if Input.is_action_just_pressed("fire"):
-			fire.rpc_id(1, get_global_mouse_position())
+			fire.rpc(get_global_mouse_position())
 	if Input.is_action_just_pressed("position"):
 		print(get_global_mouse_position())
 
@@ -140,11 +140,13 @@ func free_piece_action():
 		elif player.is_in_group('blue'):
 			blue_piece.texture = null
 
-@rpc("call_local")
+@rpc("call_local", "reliable")
 func fire(mouse_pos):
-	var bullet_inst = bullet_scene.instantiate()
-	bullet_inst.set_velocity(global_position.direction_to(mouse_pos) * 200)
-	bullet_inst.global_position = global_position
-	fired.emit(bullet_inst)
-
+	if with_piece == 1:
+		var bullet_inst = bullet_scene.instantiate()
+		bullet_inst.set_velocity(global_position.direction_to(mouse_pos) * 200)
+		bullet_inst.global_position = global_position
+		player.get_child(8).reparent(bullet_inst)
+		fired.emit(bullet_inst)
+		with_piece = 0
 
