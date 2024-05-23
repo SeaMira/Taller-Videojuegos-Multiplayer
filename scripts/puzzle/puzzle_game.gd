@@ -95,48 +95,48 @@ func place_orange_piece(i, j, n, rngx, rngy):
 	#piece_body.scale = scale_factor
 	# Configura los RigidBody2D para ser estáticos o kinemáticos según lo necesites aquí
 	# piece_body.mode = RigidBody2D.MODE_STATIC o RigidBody2D.MODE_KINEMATIC
-	
+
 
 func _on_cell_body_entered(body, area):
-	if body is CharacterBody2D:
-		body = body.get_child(3)
-	if body != null and is_multiplayer_authority():
-		var bodies = area.get_overlapping_bodies()
-		if body.is_in_group("blue") and (body is RigidBody2D):
-			#print(body, multiplayer.get_unique_id())
+	if is_multiplayer_authority():
+		var start_bodies = area.get_overlapping_bodies()
+		var bodies = []
+		for element in start_bodies:
+			if element is CharacterBody2D:
+				bodies.append(element)
+		if body.is_in_group("blue") and (body is CharacterBody2D):
 			var indxs = PuzzleSettings.search_blue_piece(body)
 			if !(indxs):
 				var splitted = body.name.split("_")
 				indxs = Vector2(float(splitted[1]), float(splitted[2]))
 			var body_name = "celda_" + str(indxs.x) + "_" + str(indxs.y)
-			#print("body name", body_name, area.name)
 			if area.name == body_name:
 				if bodies.size() >= 2:
-					#print("bodies size")
 					for b in bodies:
 						if b.is_in_group("orange"):
 							var indxs2 = PuzzleSettings.search_orange_piece(b)
+							if !(indxs2):
+								var splitted2 = body.name.split("_")
+								indxs2 = Vector2(float(splitted2[1]), float(splitted2[2]))
 							var b_name = "celda_" + str(indxs2.x) + "_" + str(indxs2.y)
-							#print(body.transform[2], b.transform[2], PIECE_SIZE)
 							if body_name == b_name and check_piece_superposition(body.get_global_position(), b.get_global_position()):
 								prueba.rpc(area.name)
 								
-		elif body != null and body.is_in_group("orange") and (body is RigidBody2D):
-			#print(body, multiplayer.get_unique_id())
+		elif body.is_in_group("orange") and (body is CharacterBody2D):
 			var indxs = PuzzleSettings.search_orange_piece(body)
 			if !(indxs):
 				var splitted = body.name.split("_")
 				indxs = Vector2(float(splitted[1]), float(splitted[2]))
 			var body_name = "celda_" + str(indxs.x) + "_" + str(indxs.y)
-			#print("body name", body_name, area.name)
 			if area.name == body_name:
 				if bodies.size() >= 2:
-					#print("bodies size")
 					for b in bodies:
 						if b.is_in_group("blue"):
 							var indxs2 = PuzzleSettings.search_blue_piece(b)
+							if !(indxs2):
+								var splitted2 = body.name.split("_")
+								indxs2 = Vector2(float(splitted2[1]), float(splitted2[2]))
 							var b_name = "celda_" + str(indxs2.x) + "_" + str(indxs2.y)
-							#print(body.transform[2], b.transform[2], PuzzleSettings.PIECE_WIDTH, PuzzleSettings.PIECE_HEIGHT)
 							if body_name == b_name and check_piece_superposition(body.get_global_position(), b.get_global_position()):
 								prueba.rpc(area.name)
 		

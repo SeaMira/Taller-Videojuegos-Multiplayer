@@ -20,7 +20,6 @@ func _ready():
 
 
 func _process(delta):
-	
 	if positioned:
 		delta_counter += 1
 		if delta_counter >= 250:
