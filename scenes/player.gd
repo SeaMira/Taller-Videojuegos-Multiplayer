@@ -43,17 +43,13 @@ func _physics_process(delta):
 	if is_multiplayer_authority():
 		if Input.is_action_just_pressed("fire"):
 			fire.rpc(get_global_mouse_position())
-	if Input.is_action_just_pressed("position"):
-		print(get_global_mouse_position())
 
 
 	if grab_piece and not with_piece:
 		grab_piece_action.rpc()
-		with_piece = 1
 		
 	if free_piece and with_piece:
 		free_piece_action.rpc()
-		with_piece = 0
 	
 	if velocity.x > 0:
 		playback.travel("go_right")
@@ -99,6 +95,7 @@ func grab_piece_action():
 		#max_z_piece.global_position.y += 20
 		piece_grabbed = max_z_piece
 		piece_grabbed.hide()
+		with_piece = 1
 		
 		if player.is_in_group('orange'):
 			var piece_texture = piece_grabbed.get_child(0).texture
@@ -133,6 +130,7 @@ func free_piece_action():
 		piece_grabbed.reparent(get_tree().get_root().get_node("/root/Main/PiecesShow"))
 		piece_grabbed.show()
 		piece_grabbed = null
+		with_piece = 0
 	
 		if player.is_in_group('orange'):
 			orange_piece.texture = null
@@ -146,7 +144,19 @@ func fire(mouse_pos):
 		var bullet_inst = bullet_scene.instantiate()
 		bullet_inst.set_velocity(global_position.direction_to(mouse_pos) * 200)
 		bullet_inst.global_position = global_position
-		player.get_child(8).reparent(bullet_inst)
+		var piece = player.get_child(8)
+		piece.position = Vector2(0,0)
+		var group = null
+		if player.is_in_group('orange'):
+			orange_piece.texture = null
+			group = 'orange'
+		
+		elif player.is_in_group('blue'):
+			blue_piece.texture = null
+			group = 'blue'
+		bullet_inst.set_name(piece.name)
+		bullet_inst.set_group(group)
+		piece.reparent(bullet_inst)
 		fired.emit(bullet_inst)
 		with_piece = 0
 
