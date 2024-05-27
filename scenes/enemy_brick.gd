@@ -27,7 +27,6 @@ func _process(delta):
 		delta_counter += delta
 		if delta_counter >= 5:
 			delta_counter = 0
-			var directions = [Vector2(1, 0), Vector2(-1, 0), Vector2(0, 1), Vector2(0, -1)]
 			for direction in directions:
 				var projectile = load("res://scenes/projectile.tscn").instantiate()
 				projectile.set_velocity(direction * 200)
