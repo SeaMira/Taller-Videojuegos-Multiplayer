@@ -19,6 +19,8 @@ signal fired(bullet)
 var blue_piece
 var orange_piece
 
+@export var on_platform = false
+
 @export var score = 1 :
 	set(value):
 		score = value
@@ -70,12 +72,10 @@ func send_data(pos: Vector2, vel: Vector2):
 func _on_area_2d_body_entered(body):
 	#if body.is_in_group('orange'):
 	pieces_on_area.append(body)
-	print(pieces_on_area)
 	
 func _on_area_2d_body_exited(body):
 	#if body.is_in_group('orange') and body in pieces_on_area:
 	pieces_on_area.erase(body)
-	print(pieces_on_area)
 
 @rpc("authority", "call_local", "reliable")
 func grab_piece_action():
@@ -138,9 +138,9 @@ func free_piece_action():
 		elif player.is_in_group('blue'):
 			blue_piece.texture = null
 
-@rpc("call_local", "reliable")
+@rpc("authority", "call_local", "reliable")
 func fire(mouse_pos):
-	if with_piece == 1:
+	if with_piece == 1 and on_platform:	
 		var bullet_inst = bullet_scene.instantiate()
 		bullet_inst.set_velocity(global_position.direction_to(mouse_pos) * 200)
 		bullet_inst.global_position = global_position
@@ -160,3 +160,10 @@ func fire(mouse_pos):
 		fired.emit(bullet_inst)
 		with_piece = 0
 
+@rpc("any_peer", "call_local", "reliable")
+func on_shoot_plat():
+	on_platform = true
+
+@rpc("any_peer", "call_local", "reliable")
+func off_shoot_plat():
+	on_platform = false

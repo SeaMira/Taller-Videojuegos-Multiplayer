@@ -32,3 +32,5 @@ func _ready() -> void:
 
 func _on_player_fired(bullet):
 	bullets.add_child(bullet, true)
+
+

@@ -8,4 +8,4 @@ func _physics_process(delta):
 
 
 func handle_collision(collision : KinematicCollision2D):
-	velocity = velocity.bounce(collision.get_normal())
+	queue_free()

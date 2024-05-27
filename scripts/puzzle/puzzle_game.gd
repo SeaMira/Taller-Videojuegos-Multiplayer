@@ -74,7 +74,7 @@ func place_blue_piece(i, j, n, rngx, rngy):
 	piece_body.add_to_group("blue")
 	var viewport_size = base_size
 	# Calcula la posición basándote en el tamaño de la pieza, escala, y márgenes
-	var position = Vector2(viewport_size.x*(0.8 + 0.17*rngx), viewport_size.y*(0.55 + 0.42*rngy))
+	var position = Vector2(viewport_size.x*(0.8 + 0.2*rngx), viewport_size.y*(0.03 + 0.42*rngy))
 	piece_body.position = position
 	#piece_body.scale = scale_factor
 	# Configura los RigidBody2D para ser estáticos o kinemáticos según lo necesites aquí
@@ -90,7 +90,7 @@ func place_orange_piece(i, j, n, rngx, rngy):
 	piece_body.add_to_group("orange")
 	var viewport_size = base_size
 	# Calcula la posición basándote en el tamaño de la pieza, escala, y márgenes
-	var position = Vector2(viewport_size.x*(0.8 + 0.2*rngx), viewport_size.y*(0.03 + 0.42*rngy))
+	var position = Vector2(viewport_size.x*(0.8 + 0.17*rngx), viewport_size.y*(0.55 + 0.42*rngy))
 	piece_body.position = position
 	#piece_body.scale = scale_factor
 	# Configura los RigidBody2D para ser estáticos o kinemáticos según lo necesites aquí
@@ -145,11 +145,9 @@ func prueba(area_name):
 	var idxs = area_name.split("_")
 	var x = int(idxs[1])
 	var y = int(idxs[2])
-	print(x, y)
 	place_piece_image(x, y)
 	PuzzleSettings.clean_by_ids(x, y)
 	clean_bullets.rpc()
-	#print("tariamo entonce")
 
 @rpc("authority", "call_local", "reliable")
 func clean_bullets():

@@ -1,4 +1,4 @@
-[gd_scene load_steps=24 format=3 uid="uid://b5hufqs7sbm01"]
+[gd_scene load_steps=26 format=3 uid="uid://b5hufqs7sbm01"]
 
 [ext_resource type="Script" path="res://scenes/main.gd" id="1_ysfbh"]
 [ext_resource type="Texture2D" uid="uid://yvb5odlpjxkk" path="res://assets/grass.png" id="2_0yjug"]
@@ -7,9 +7,11 @@
 [ext_resource type="Texture2D" uid="uid://dirfia6cbssxm" path="res://assets/blue_box.png" id="5_186ka"]
 [ext_resource type="Script" path="res://scenes/BlueBox.gd" id="6_jsrp1"]
 [ext_resource type="Texture2D" uid="uid://krt2y0sagms" path="res://assets/orange_box.png" id="7_qod55"]
+[ext_resource type="Script" path="res://scripts/areas/BlueArea.gd" id="8_3wad8"]
 [ext_resource type="Texture2D" uid="uid://cw1tfsm6qxare" path="res://assets/blue_area.png" id="8_iuh72"]
 [ext_resource type="Texture2D" uid="uid://dhldreuuf420u" path="res://assets/orange_area.png" id="9_bxcei"]
 [ext_resource type="Script" path="res://scenes/EnemyBricksSpawner.gd" id="10_n3l74"]
+[ext_resource type="Script" path="res://scripts/areas/OrangeArea.gd" id="10_ylbob"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_w68u3"]
 texture = ExtResource("2_0yjug")
@@ -475,6 +477,9 @@ shape = SubResource("SegmentShape2D_bsgxf")
 [node name="ShootingZone" type="Node2D" parent="."]
 
 [node name="BlueArea" type="Area2D" parent="ShootingZone"]
+collision_layer = 0
+collision_mask = 12
+script = ExtResource("8_3wad8")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="ShootingZone/BlueArea"]
 position = Vector2(479, 97)
@@ -486,6 +491,9 @@ scale = Vector2(35.625, 1.75)
 texture = ExtResource("8_iuh72")
 
 [node name="OrangeArea" type="Area2D" parent="ShootingZone"]
+collision_layer = 0
+collision_mask = 12
+script = ExtResource("10_ylbob")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="ShootingZone/OrangeArea"]
 position = Vector2(479, 443)
@@ -498,3 +506,8 @@ texture = ExtResource("9_bxcei")
 
 [node name="EnemyBricksSpawner" type="Node" parent="."]
 script = ExtResource("10_n3l74")
+
+[connection signal="body_entered" from="ShootingZone/BlueArea" to="ShootingZone/BlueArea" method="_on_body_entered"]
+[connection signal="body_exited" from="ShootingZone/BlueArea" to="ShootingZone/BlueArea" method="_on_body_exited"]
+[connection signal="body_entered" from="ShootingZone/OrangeArea" to="ShootingZone/OrangeArea" method="_on_body_entered"]
+[connection signal="body_exited" from="ShootingZone/OrangeArea" to="ShootingZone/OrangeArea" method="_on_body_exited"]
