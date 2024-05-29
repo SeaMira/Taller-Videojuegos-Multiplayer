@@ -8,4 +8,5 @@ func _physics_process(delta):
 
 
 func handle_collision(collision : KinematicCollision2D):
-	queue_free()
+	#queue_free()
+	pass

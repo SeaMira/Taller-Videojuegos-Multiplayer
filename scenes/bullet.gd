@@ -20,6 +20,7 @@ func handle_collision(collision : KinematicCollision2D):
 	var collider = collision.get_collider()
 	if collider.is_in_group("projectile"):
 		return_piece()
+		collider.queue_free()
 	elif collider.is_in_group("brick"):
 		collider.queue_free()
 

@@ -16,6 +16,8 @@ var status = {}
 var images = {}
 var pieces_amount_selection = {}
 
+const BUTTON_SCRIPT_PATH = preload("res://scripts/button_hover_sounds.gd")
+
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	
@@ -44,6 +46,7 @@ func _ready():
 	select_file_button.pressed.connect(self._button_pressed.bind("some_variable_or_value"))
 	file_dialog.file_selected.connect(self._file_selected)
 	
+	assign_script_to_buttons(get_tree().root, BUTTON_SCRIPT_PATH)
 
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
@@ -240,3 +243,10 @@ func new_piece_body(image_texture, i, j, texture_width, texture_height, scale_x,
 	piece_body.add_child(collision_shape)
 	
 	return piece_body
+
+func assign_script_to_buttons(node, script):
+	if node is Button:
+		node.set_script(script)
+		node._ready()
+	for child in node.get_children():
+		assign_script_to_buttons(child, script)

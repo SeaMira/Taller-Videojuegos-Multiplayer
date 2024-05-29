@@ -20,6 +20,7 @@ config/icon="res://icon.svg"
 Debug="*res://scripts/debug.gd"
 Game="*res://scenes/game.tscn"
 PuzzleSettings="*res://scenes/puzzle_settings.gd"
+GlobalMusic="*res://scenes/global_music/global_music.tscn"
 
 [display]
 

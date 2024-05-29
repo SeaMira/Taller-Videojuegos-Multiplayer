@@ -65,3 +65,11 @@ func clean_by_ids(x, y):
 	if (blue_pieces.size() == 0 and orange_pieces.size() == 0):
 		get_tree().change_scene_to_file("res://scenes/victory/VictoryScene.tscn")
 
+func clean_puzzle_settings():
+	PUZZLE_IMAGE = null
+	PUZZLE_PIECES = null
+	orange_pieces = []
+	blue_pieces = []
+	PUZZLE_SCALE = null
+	PIECE_WIDTH = null
+	PIECE_HEIGHT = null

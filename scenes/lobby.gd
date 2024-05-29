@@ -2,7 +2,6 @@ extends MarginContainer
 
 
 
-
 @onready var user = %User
 @onready var host = %Host
 @onready var join = %Join
@@ -39,6 +38,8 @@ var status = { 1 : false }
 
 var _menu_stack: Array[Control] = []
 
+const BUTTON_SCRIPT_PATH = preload("res://scripts/button_hover_sounds.gd")
+
 func _ready():
 	
 	if Game.multiplayer_test:
@@ -64,7 +65,7 @@ func _ready():
 	
 	role_a.pressed.connect(func(): Game.set_current_player_role(Statics.Role.BLUE))
 	role_b.pressed.connect(func(): Game.set_current_player_role(Statics.Role.ORANGE))
-	
+	assign_script_to_buttons(get_tree().root, BUTTON_SCRIPT_PATH)
 	ready_toggle.pressed.connect(_on_ready_toggled)
 	
 	start_timer.timeout.connect(_on_start_timer_timeout)
@@ -289,3 +290,10 @@ func _back_to_first_menu() -> void:
 		first.show()
 	if Game.is_online():
 		_disconnect()
+
+func assign_script_to_buttons(node, script):
+	if node is Button:
+		node.set_script(script)
+		node._ready()
+	for child in node.get_children():
+		assign_script_to_buttons(child, script)
