@@ -144,17 +144,21 @@ func fire(mouse_pos):
 		with_piece = 0
 		var bullet_inst = bullet_scene.instantiate()
 		bullet_inst.set_velocity(global_position.direction_to(mouse_pos) * 200)
-		bullet_inst.global_position = global_position
 		var piece = player.get_child(8)
-		piece.position = Vector2(0,0)
+		if !piece:
+			return
 		var group = null
 		if player.is_in_group('orange'):
 			orange_piece.texture = null
 			group = 'orange'
+			bullet_inst.global_position = global_position - Vector2(0,15)
+			piece.position = Vector2(0, -15)
 		
 		elif player.is_in_group('blue'):
 			blue_piece.texture = null
 			group = 'blue'
+			bullet_inst.global_position = global_position + Vector2(0,15)
+			piece.position = Vector2(0, 15)
 		bullet_inst.set_name(piece.name)
 		bullet_inst.set_group(group)
 		piece.reparent(bullet_inst)

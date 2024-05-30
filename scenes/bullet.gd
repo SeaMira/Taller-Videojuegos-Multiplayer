@@ -1,10 +1,14 @@
 extends CharacterBody2D
 
+@onready var collision_shape_2d = $CollisionShape2D
 @export var player_group = 'null'
 @export var durability = 1
 var base_size = Vector2i(960, 540) 
 
 func _ready():
+	var shape = RectangleShape2D.new()
+	shape.extents = Vector2(base_size.x*0.3/10, base_size.y*0.3/10) 
+	collision_shape_2d.shape = shape
 	if get_child(3):
 		show_piece.rpc()
 	if player_group != 'null':
@@ -24,7 +28,7 @@ func handle_collision(collision : KinematicCollision2D):
 		return_piece.rpc()
 	elif collider.is_in_group("brick"):
 		collider.queue_free()
-	elif (collider.is_in_group('orange') and player_group != 'orange') or (collider.is_in_group('blue') and player_group != 'blue'):
+	elif (collider.is_in_group('orange') and player_group == 'blue') or (collider.is_in_group('blue') and player_group == 'orange'):
 		prueba.rpc()
 
 func place_piece_image(x, y):
@@ -39,7 +43,7 @@ func place_piece_image(x, y):
 	var offsetx = ((y- (int((PuzzleSettings.PUZZLE_PIECES)/2)+1/2))*w + w/2)*PuzzleSettings.PUZZLE_SCALE.x
 	var offsety = ((x- (int((PuzzleSettings.PUZZLE_PIECES)/2)))*h + h/2)*PuzzleSettings.PUZZLE_SCALE.y
 	piece.position = base_size/2 + Vector2i(offsetx, offsety)
-	add_child(piece)
+	get_tree().get_root().add_child(piece)
 
 @rpc("any_peer", "call_local", "reliable")
 func prueba():
@@ -48,6 +52,12 @@ func prueba():
 	var y = int(idxs[2])
 	place_piece_image(x, y)
 	PuzzleSettings.clean_by_ids(x, y)
+	clean_bullets()
+	
+func clean_bullets():
+	if PuzzleSettings.blue_pieces.size() != 0:
+		for bullet in get_node("/root/Main/Bullets").get_children():
+			bullet.queue_free()
 
 func set_group(group):
 	player_group = group
@@ -62,7 +72,7 @@ func reduce_durability():
 
 @rpc("authority", "call_local", "reliable")
 func check_durability():
-	if durability == 0:
+	if durability <= 0:
 		return_piece.rpc()
 
 @rpc("any_peer", "call_local", "reliable")

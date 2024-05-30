@@ -62,6 +62,7 @@ func piece_places_setup(i, j, width, height, pos):
 	area.collision_layer = 2
 	area.collision_mask = 11
 	area.body_entered.connect(_on_cell_body_entered.bind(area))
+	area.body_exited.connect(_on_cell_body_exited)
 	add_child(area) # Asegúrate de que este script esté adjunto a un nodo que pueda ser padre de Area2D
 
 @rpc("any_peer", "call_local", "reliable")
@@ -96,25 +97,30 @@ func place_orange_piece(i, j, n, rngx, rngy):
 	# Configura los RigidBody2D para ser estáticos o kinemáticos según lo necesites aquí
 	# piece_body.mode = RigidBody2D.MODE_STATIC o RigidBody2D.MODE_KINEMATIC
 
-
-func _on_cell_body_entered(body, area):
+func _on_cell_body_exited(body):
+	check_pieces_out_cell.rpc(body)
+	
+@rpc("any_peer", "call_local", "reliable")
+func check_pieces_out_cell(body):
+	if body is CharacterBody2D and (body.is_in_group("blue") or body.is_in_group("orange")):
+		body.collision_mask = 224
+	
+func _on_cell_body_entered(body, area:Area2D):
 	check_pieces_on_cell.rpc(body,area)
+	
 	
 @rpc("any_peer", "call_local", "reliable")
 func check_pieces_on_cell(body, area:Area2D):
 	if is_multiplayer_authority():
 		var start_bodies = area.get_overlapping_bodies()
 		var bodies = []
-		var pos1 = null
-		var pos2 = null
+
 		for element in start_bodies:
 			if element is CharacterBody2D and body is CharacterBody2D and ((body.is_in_group("blue") and element.is_in_group("orange")) or (body.is_in_group("orange") and element.is_in_group("blue"))):
 				bodies.append(element)
 				bodies.append(body)
-				pos1 = element.get_global_position()
-				pos2 = body.get_global_position()
 			#print("bodies ", bodies)
-		if bodies.size() == 2 and pos1 and pos2:
+		if bodies.size() == 2:
 			var indxs = PuzzleSettings.search_blue_piece(bodies[0])
 			if !(indxs):
 				var splitted = bodies[0].name.split("_")
@@ -130,43 +136,6 @@ func check_pieces_on_cell(body, area:Area2D):
 			if b2_name == area.name and b1_name == area.name:
 				bodies[0].collision_mask = 232
 				bodies[1].collision_mask = 232
-			print(pos1, " ", pos2, " ", PuzzleSettings.PIECE_WIDTH/2, " ", PuzzleSettings.PIECE_HEIGHT/2)
-
-		#if body.is_in_group("blue") and (body is CharacterBody2D):
-			#var indxs = PuzzleSettings.search_blue_piece(body)
-			#if !(indxs):
-				#var splitted = body.name.split("_")
-				#indxs = Vector2(float(splitted[1]), float(splitted[2]))
-			#var body_name = "celda_" + str(indxs.x) + "_" + str(indxs.y)
-			#if area.name == body_name:
-				#if bodies.size() >= 2:
-					#for b in bodies:
-						#if b.is_in_group("orange"):
-							#var indxs2 = PuzzleSettings.search_orange_piece(b)
-							#if !(indxs2):
-								#var splitted2 = body.name.split("_")
-								#indxs2 = Vector2(float(splitted2[1]), float(splitted2[2]))
-							#var b_name = "celda_" + str(indxs2.x) + "_" + str(indxs2.y)
-							#if body_name == b_name and check_piece_superposition(body.get_global_position(), b.get_global_position()):
-								#prueba(area.name)
-								#
-		#elif body.is_in_group("orange") and (body is CharacterBody2D):
-			#var indxs = PuzzleSettings.search_orange_piece(body)
-			#if !(indxs):
-				#var splitted = body.name.split("_")
-				#indxs = Vector2(float(splitted[1]), float(splitted[2]))
-			#var body_name = "celda_" + str(indxs.x) + "_" + str(indxs.y)
-			#if area.name == body_name:
-				#if bodies.size() >= 2:
-					#for b in bodies:
-						#if b.is_in_group("blue"):
-							#var indxs2 = PuzzleSettings.search_blue_piece(b)
-							#if !(indxs2):
-								#var splitted2 = body.name.split("_")
-								#indxs2 = Vector2(float(splitted2[1]), float(splitted2[2]))
-							#var b_name = "celda_" + str(indxs2.x) + "_" + str(indxs2.y)
-							#if body_name == b_name and check_piece_superposition(body.get_global_position(), b.get_global_position()):
-								#prueba(area.name)
 		
 
 func prueba(area_name):
