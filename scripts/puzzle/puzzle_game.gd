@@ -98,12 +98,17 @@ func place_orange_piece(i, j, n, rngx, rngy):
 
 
 func _on_cell_body_entered(body, area):
+	check_pieces_on_cell.rpc(body,area)
+	
+@rpc("any_peer", "call_local", "reliable")
+func check_pieces_on_cell(body, area:Area2D):
 	if is_multiplayer_authority():
 		var start_bodies = area.get_overlapping_bodies()
 		var bodies = []
 		for element in start_bodies:
 			if element is CharacterBody2D:
 				bodies.append(element)
+			print("bodies ", bodies)
 		if body.is_in_group("blue") and (body is CharacterBody2D):
 			var indxs = PuzzleSettings.search_blue_piece(body)
 			if !(indxs):
@@ -120,7 +125,7 @@ func _on_cell_body_entered(body, area):
 								indxs2 = Vector2(float(splitted2[1]), float(splitted2[2]))
 							var b_name = "celda_" + str(indxs2.x) + "_" + str(indxs2.y)
 							if body_name == b_name and check_piece_superposition(body.get_global_position(), b.get_global_position()):
-								prueba.rpc(area.name)
+								prueba(area.name)
 								
 		elif body.is_in_group("orange") and (body is CharacterBody2D):
 			var indxs = PuzzleSettings.search_orange_piece(body)
@@ -138,9 +143,9 @@ func _on_cell_body_entered(body, area):
 								indxs2 = Vector2(float(splitted2[1]), float(splitted2[2]))
 							var b_name = "celda_" + str(indxs2.x) + "_" + str(indxs2.y)
 							if body_name == b_name and check_piece_superposition(body.get_global_position(), b.get_global_position()):
-								prueba.rpc(area.name)
+								prueba(area.name)
 		
-@rpc("any_peer", "call_local", "reliable")
+
 func prueba(area_name):
 	var idxs = area_name.split("_")
 	var x = int(idxs[1])
