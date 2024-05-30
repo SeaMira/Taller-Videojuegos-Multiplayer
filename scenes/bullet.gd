@@ -70,7 +70,7 @@ func show_piece():
 func reduce_durability():
 	durability = durability - 1
 
-@rpc("authority", "call_local", "reliable")
+@rpc("any_peer", "call_local", "reliable")
 func check_durability():
 	if durability <= 0:
 		return_piece.rpc()

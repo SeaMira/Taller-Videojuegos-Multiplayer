@@ -27,6 +27,11 @@ func _ready():
 	var scale_factor = Vector2(1.0, 1.0)
 	var n = PuzzleSettings.PUZZLE_PIECES
 
+	table_setup.rpc(n, piece_size, scale_factor, margin)
+	set_timer.rpc()
+
+@rpc("any_peer", "call_local", "reliable")
+func table_setup(n, piece_size, scale_factor, margin):
 	for i in range(n):
 		for j in range(n):
 			var position =  Vector2(j * (piece_size.x * scale_factor.x + margin), i * (piece_size.y * scale_factor.y + margin))
@@ -38,7 +43,6 @@ func _ready():
 				var rngy = rng.randf()
 				place_blue_piece.rpc(i, j, n, rngx, rngy)
 				place_orange_piece.rpc(i, j, n, rngx, rngy)
-	set_timer.rpc()
 
 func _process(_delta):
 	if game_timer.is_stopped():

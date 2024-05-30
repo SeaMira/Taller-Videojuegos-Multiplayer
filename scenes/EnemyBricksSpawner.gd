@@ -3,16 +3,17 @@ extends Node
 var base_size = Vector2i(960, 540) 
 var piece_size = base_size * (0.6/PuzzleSettings.PUZZLE_PIECES)
 
-var rng = RandomNumberGenerator.new()
 
 func _ready():
-	spawn_bricks()
+	spawn_bricks.rpc()
 
 func _process(delta):
 	pass
 
+@rpc("any_peer", "call_local", "reliable")
 func spawn_bricks():
 	if multiplayer.is_server():
+		var rng = RandomNumberGenerator.new()
 		var puzzle_dim = PuzzleSettings.PUZZLE_PIECES
 		var scale_factor = Vector2(1.0, 1.0)
 		var number_of_bricks = rng.randi_range(puzzle_dim * 2 - 2, puzzle_dim * 2)

@@ -8,6 +8,7 @@ extends MarginContainer
 
 func _ready():
 	multiplayer.multiplayer_peer.close()
+	Game.players = []
 	PuzzleSettings.clean_puzzle_settings()
 	GlobalMusic.play_menu_music()
 	
