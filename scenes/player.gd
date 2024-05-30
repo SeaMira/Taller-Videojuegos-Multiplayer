@@ -141,6 +141,7 @@ func free_piece_action():
 @rpc("authority", "call_local", "reliable")
 func fire(mouse_pos):
 	if with_piece == 1 and on_platform:	
+		with_piece = 0
 		var bullet_inst = bullet_scene.instantiate()
 		bullet_inst.set_velocity(global_position.direction_to(mouse_pos) * 200)
 		bullet_inst.global_position = global_position
@@ -158,7 +159,6 @@ func fire(mouse_pos):
 		bullet_inst.set_group(group)
 		piece.reparent(bullet_inst)
 		fired.emit(bullet_inst)
-		with_piece = 0
 
 @rpc("any_peer", "call_local", "reliable")
 func on_shoot_plat():
