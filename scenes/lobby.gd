@@ -39,6 +39,8 @@ var status = { 1 : false }
 
 var _menu_stack: Array[Control] = []
 
+const BUTTON_SCRIPT_PATH = preload("res://scripts/button_hover_sounds.gd")
+
 func _ready():
 	
 	if Game.multiplayer_test:
@@ -64,7 +66,7 @@ func _ready():
 	
 	role_a.pressed.connect(func(): Game.set_current_player_role(Statics.Role.BLUE))
 	role_b.pressed.connect(func(): Game.set_current_player_role(Statics.Role.ORANGE))
-	
+	assign_script_to_buttons(get_tree().root, BUTTON_SCRIPT_PATH)
 	ready_toggle.pressed.connect(_on_ready_toggled)
 	
 	start_timer.timeout.connect(_on_start_timer_timeout)
@@ -95,6 +97,7 @@ func _on_upnp_completed(status) -> void:
 
 func _on_host_pressed() -> void:
 	var peer = ENetMultiplayerPeer.new()
+	GlobalMusic.on_button_press()
 	
 	var err = peer.create_server(Statics.PORT, Statics.MAX_CLIENTS)
 	if err:
@@ -111,6 +114,7 @@ func _on_host_pressed() -> void:
 
 func _on_join_pressed() -> void:
 	_go_to_menu(join_menu)
+	GlobalMusic.on_button_press()
 
 
 func _on_confirm_join_pressed() -> void:
@@ -124,7 +128,7 @@ func _on_confirm_join_pressed() -> void:
 	
 	var player = Statics.PlayerData.new(multiplayer.get_unique_id(), user.text)
 	_add_player(player)
-	
+	GlobalMusic.on_button_press()
 	_go_to_menu(ready_menu)
 
 
@@ -194,6 +198,7 @@ func _paint_ready(id: int) -> void:
 
 func _on_ready_toggled() -> void:
 	player_ready.rpc_id(1, multiplayer.get_unique_id())
+	GlobalMusic.on_button_press()
 
 
 @rpc("reliable", "any_peer", "call_local")
@@ -278,6 +283,7 @@ func _back_menu() -> void:
 	var menu = _menu_stack.back()
 	if menu:
 		menu.show()
+	GlobalMusic.on_button_press()
 	_disconnect()
 
 
@@ -289,3 +295,10 @@ func _back_to_first_menu() -> void:
 		first.show()
 	if Game.is_online():
 		_disconnect()
+
+func assign_script_to_buttons(node, script):
+	if node is Button:
+		node.set_script(script)
+		node._ready()
+	for child in node.get_children():
+		assign_script_to_buttons(child, script)

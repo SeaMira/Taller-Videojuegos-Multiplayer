@@ -13,6 +13,8 @@ var piece_grabbed = null
 @onready var animation_tree = $AnimationTree
 @onready var playback = animation_tree.get("parameters/playback")
 @export var bullet_scene: PackedScene
+@onready var piece_sound = $PieceSound
+@onready var shooting_piece_sound = $ShootingPieceSound
 
 signal fired(bullet)
 
@@ -95,6 +97,7 @@ func grab_piece_action():
 		#max_z_piece.global_position.y += 20
 		piece_grabbed = max_z_piece
 		piece_grabbed.hide()
+		piece_sound.play()
 		with_piece = 1
 		
 		if player.is_in_group('orange'):
@@ -144,7 +147,7 @@ func fire(mouse_pos):
 		with_piece = 0
 		var bullet_inst = bullet_scene.instantiate()
 		bullet_inst.set_velocity(global_position.direction_to(mouse_pos) * 200)
-		var piece = player.get_child(8)
+		var piece = player.get_child(10)
 		if !piece:
 			return
 		var group = null
@@ -163,6 +166,7 @@ func fire(mouse_pos):
 		bullet_inst.set_group(group)
 		piece.reparent(bullet_inst)
 		fired.emit(bullet_inst)
+		shooting_piece_sound.play()
 
 @rpc("any_peer", "call_local", "reliable")
 func on_shoot_plat():

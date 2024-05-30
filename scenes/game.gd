@@ -52,6 +52,7 @@ func set_player_role(id: int, role: Statics.Role) -> void:
 
 func set_current_player_role(role: Statics.Role) -> void:
 	set_player_role.rpc(multiplayer.get_unique_id(), role)
+	GlobalMusic.on_button_press()
 
 
 func is_online() -> bool:

@@ -4,6 +4,7 @@ extends Node2D
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
+	GlobalMusic.play_victory_music()
 	to_menu_timer.one_shot = true
 	#game_timer.autostart = true
 	to_menu_timer.timeout.connect(_on_GameTimer_timeout)

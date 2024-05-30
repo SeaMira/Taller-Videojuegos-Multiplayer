@@ -10,6 +10,7 @@ var puzzle: Sprite2D = null
 var PIECE_SIZE = null
 # Called when the node enters the scene tree for the first time.
 func _ready():
+	GlobalMusic.play_in_game_music()
 	set_multiplayer_authority(multiplayer.get_unique_id())
 	puzzle = Sprite2D.new()
 	#puzzle.modulate.a = 0.5
