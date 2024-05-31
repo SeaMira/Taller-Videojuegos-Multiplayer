@@ -30,7 +30,7 @@ func _ready():
 	table_setup.rpc(n, piece_size, scale_factor, margin)
 	set_timer.rpc()
 
-@rpc("any_peer", "call_local", "reliable")
+@rpc("authority", "call_local", "reliable")
 func table_setup(n, piece_size, scale_factor, margin):
 	for i in range(n):
 		for j in range(n):
@@ -186,7 +186,7 @@ func set_timer():
 	game_timer.one_shot = true
 	
 	game_timer.timeout.connect(_on_GameTimer_timeout)
-	game_timer.start(PuzzleSettings.PUZZLE_PIECES*6) #* PuzzleSettings.PUZZLE_PIECES * 60)
+	game_timer.start(PuzzleSettings.PUZZLE_PIECES*60) #* PuzzleSettings.PUZZLE_PIECES * 60)
 
 func _on_GameTimer_timeout():
 	print("¡Tiempo agotado! Has perdido el juego.")

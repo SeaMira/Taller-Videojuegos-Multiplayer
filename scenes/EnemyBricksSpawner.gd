@@ -10,7 +10,7 @@ func _ready():
 func _process(delta):
 	pass
 
-@rpc("any_peer", "call_local", "reliable")
+@rpc("authority", "call_local", "reliable")
 func spawn_bricks():
 	if multiplayer.is_server():
 		var rng = RandomNumberGenerator.new()
