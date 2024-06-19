@@ -507,7 +507,11 @@ texture = ExtResource("9_bxcei")
 [node name="EnemyBricksSpawner" type="Node" parent="."]
 script = ExtResource("10_n3l74")
 
+[node name="Timer" type="Timer" parent="EnemyBricksSpawner"]
+wait_time = 5.0
+
 [connection signal="body_entered" from="ShootingZone/BlueArea" to="ShootingZone/BlueArea" method="_on_body_entered"]
 [connection signal="body_exited" from="ShootingZone/BlueArea" to="ShootingZone/BlueArea" method="_on_body_exited"]
 [connection signal="body_entered" from="ShootingZone/OrangeArea" to="ShootingZone/OrangeArea" method="_on_body_entered"]
 [connection signal="body_exited" from="ShootingZone/OrangeArea" to="ShootingZone/OrangeArea" method="_on_body_exited"]
+[connection signal="timeout" from="EnemyBricksSpawner/Timer" to="EnemyBricksSpawner" method="_on_timer_timeout"]

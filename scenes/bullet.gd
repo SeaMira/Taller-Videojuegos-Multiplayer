@@ -27,6 +27,10 @@ func handle_collision(collision : KinematicCollision2D):
 	if collider.is_in_group("projectile"):
 		return_piece.rpc()
 	elif collider.is_in_group("brick"):
+		var current_n_bricks = PuzzleSettings.current_bricks_in_game
+		if current_n_bricks != null:
+			PuzzleSettings.bricks_coords_taken.erase(collider.coord)
+			PuzzleSettings.current_bricks_in_game = current_n_bricks - 1
 		collider.queue_free()
 	elif (collider.is_in_group('orange') and player_group == 'blue') or (collider.is_in_group('blue') and player_group == 'orange'):
 		prueba.rpc()

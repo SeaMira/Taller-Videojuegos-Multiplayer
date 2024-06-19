@@ -15,6 +15,10 @@ enum Rotation {
 	LEFT
 }
 
+var total_bricks_in_game = null
+var current_bricks_in_game = null
+var bricks_coords_taken = []
+
 class PuzzlePieceData:
 	var idx: int
 	var idy: int
