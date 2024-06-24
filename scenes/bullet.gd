@@ -31,6 +31,8 @@ func handle_collision(collision : KinematicCollision2D):
 		if current_n_bricks != null:
 			PuzzleSettings.bricks_coords_taken.erase(collider.coord)
 			PuzzleSettings.current_bricks_in_game = current_n_bricks - 1
+		else:
+			print('current_bricks_in_game is null in bullet')
 		collider.queue_free()
 	elif (collider.is_in_group('orange') and player_group == 'blue') or (collider.is_in_group('blue') and player_group == 'orange'):
 		prueba.rpc()

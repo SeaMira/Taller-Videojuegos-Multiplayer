@@ -6,9 +6,14 @@ var base_size = Vector2i(960, 540)
 var piece_size = base_size * (0.6/PuzzleSettings.PUZZLE_PIECES)
 var puzzle_dim = PuzzleSettings.PUZZLE_PIECES
 var scale_factor = Vector2(1.0, 1.0)
+var number_of_bricks
 
 func _ready():
 	print('called _ready')
+	var rng = RandomNumberGenerator.new()
+	number_of_bricks = rng.randi_range(puzzle_dim * 2 - 2, puzzle_dim * 2)
+	PuzzleSettings.total_bricks_in_game = number_of_bricks
+	PuzzleSettings.current_bricks_in_game = number_of_bricks
 	spawn_bricks.rpc()
 
 func _process(delta):
@@ -21,17 +26,13 @@ func _process(delta):
 				PuzzleSettings.current_bricks_in_game = total_bricks
 			else:
 				PuzzleSettings.current_bricks_in_game = current_bricks + 1
+	else:
+		print('total_bricks is null in EnemyBricksSpawner')
 		
 @rpc("authority", "call_local", "reliable")
 func spawn_bricks():
 	if multiplayer.is_server():
-		var rng = RandomNumberGenerator.new()
-		var number_of_bricks = rng.randi_range(puzzle_dim * 2 - 2, puzzle_dim * 2)
 		var positions_taken = []
-		
-		PuzzleSettings.total_bricks_in_game = number_of_bricks
-		PuzzleSettings.current_bricks_in_game = number_of_bricks
-		print(PuzzleSettings.total_bricks_in_game, PuzzleSettings.total_bricks_in_game)
 		
 		for value in range(number_of_bricks):
 			var position_rand = get_coords(positions_taken, puzzle_dim)
@@ -42,7 +43,6 @@ func spawn_bricks():
 			position -= piece_size/2
 			var v_pos = Vector2(base_size*(0.2)) + Vector2(piece_size/2)
 			sync_brick.rpc(position + v_pos, [i,j])
-		print(positions_taken)
 		PuzzleSettings.bricks_coords_taken = positions_taken
 			
 @rpc("any_peer", "call_local", "reliable")
@@ -77,6 +77,5 @@ func respawn_brick():
 		position -= piece_size/2
 		var v_pos = Vector2(base_size*(0.2)) + Vector2(piece_size/2)
 		sync_brick.rpc(position + v_pos, [i,j])
-		print(PuzzleSettings.bricks_coords_taken)
 		
 	

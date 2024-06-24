@@ -28,36 +28,41 @@ func _ready():
 	collision_shape_2d.position = Vector2(sprite.texture.get_size() * sprite.scale / 2)
 
 func _process(delta):
-
-	if positioned:
-		delta_counter += delta
-		if delta_counter >= 5:
-			delta_counter = 0
-			var max_pos = (puzzle_dim * 2) - 1
-			print(coord)
-			
-			if coord[0] == 0 and coord[1] == 0:
-				directions = [Vector2.DOWN, Vector2.RIGHT]
-			elif coord[0] == 0 and coord[1] == max_pos:
-				directions = [Vector2.LEFT, Vector2.DOWN]
-			elif coord[0] == max_pos and coord[1] == 0:
-				directions = [Vector2.UP, Vector2.RIGHT]
-			elif coord[0] == max_pos and coord[1] == max_pos:
-				directions = [Vector2.UP, Vector2.LEFT]
-			elif coord[0] == 0:
-				directions = [Vector2.LEFT, Vector2.DOWN, Vector2.RIGHT]
-			elif coord[0] == max_pos:
-				[Vector2.UP, Vector2.UP, Vector2.LEFT]
-			elif coord[1] == 0:
-				[Vector2.RIGHT, Vector2.DOWN, Vector2.UP]
-			elif coord[1] == max_pos:
-				[Vector2.DOWN, Vector2.UP, Vector2.LEFT]
-			
-			for direction in directions:
-				sync_projectile.rpc(direction)
+	if multiplayer.is_server():
+		if positioned:
+			delta_counter += delta
+			if delta_counter >= 5:
+				delta_counter = 0
+				var max_pos = (puzzle_dim * 2) - 1
+				#print(coord)
+				
+				if coord[0] == 0 and coord[1] == 0:
+					directions = [Vector2.DOWN, Vector2.RIGHT]
+				elif coord[0] == 0 and coord[1] == max_pos:
+					directions = [Vector2.LEFT, Vector2.DOWN]
+				elif coord[0] == max_pos and coord[1] == 0:
+					directions = [Vector2.UP, Vector2.RIGHT]
+				elif coord[0] == max_pos and coord[1] == max_pos:
+					directions = [Vector2.UP, Vector2.LEFT]
+				elif coord[0] == 0:
+					directions = [Vector2.LEFT, Vector2.DOWN, Vector2.RIGHT]
+				elif coord[0] == max_pos:
+					[Vector2.UP, Vector2.UP, Vector2.LEFT]
+				elif coord[1] == 0:
+					[Vector2.RIGHT, Vector2.DOWN, Vector2.UP]
+				elif coord[1] == max_pos:
+					[Vector2.DOWN, Vector2.UP, Vector2.LEFT]
+				
+				for direction in directions:
+					sync_projectile.rpc(direction)
 
 @rpc("any_peer", "call_local", "reliable")
 func sync_projectile(direction):
+	var brick_global_position = enemy_brick.global_position
 	var projectile = load("res://scenes/projectile.tscn").instantiate()
 	projectile.set_velocity(direction * 200)
+	var projectile_relative_position = brick_texture_size * brick_scale_factor / 2
+	var new_global_position = brick_global_position + projectile_relative_position
+	var new_local_position = enemy_brick.to_local(new_global_position)
+	projectile.position = new_local_position
 	add_child(projectile)

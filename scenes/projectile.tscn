@@ -14,7 +14,7 @@ properties/0/replication_mode = 1
 [node name="Projectile" type="CharacterBody2D" groups=["projectile"]]
 scale = Vector2(0.1, 0.1)
 collision_layer = 64
-collision_mask = 40
+collision_mask = 56
 script = ExtResource("1_yv04f")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
