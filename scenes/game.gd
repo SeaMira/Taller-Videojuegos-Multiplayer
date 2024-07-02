@@ -18,6 +18,9 @@ signal upnp_completed(error)
 const SERVER_PORT = 5409
 var thread = null
 
+var is_paused = false
+var pause_screen = null
+
 
 func add_player(player: Statics.PlayerData) -> void:
 	players.append(player)
@@ -88,4 +91,3 @@ func _ready():
 func _exit_tree():
 	# Wait for thread finish here to handle game exit while the thread is running.
 	thread.wait_to_finish()
-
