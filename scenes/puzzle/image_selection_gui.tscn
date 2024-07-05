@@ -1,4 +1,4 @@
-[gd_scene load_steps=7 format=3 uid="uid://bgr4becwcv71e"]
+[gd_scene load_steps=8 format=3 uid="uid://bgr4becwcv71e"]
 
 [ext_resource type="Theme" uid="uid://bcr82ieiusuu8" path="res://resources/margin_container_margins.tres" id="1_coxps"]
 [ext_resource type="Script" path="res://scripts/puzzle/image_selection_gui.gd" id="2_q622s"]
@@ -7,6 +7,8 @@
 [ext_resource type="FontFile" uid="uid://durkid6h8al5f" path="res://assets/fonts/joystix/joystix monospace.otf" id="5_5e7v6"]
 
 [sub_resource type="Theme" id="Theme_2yi6j"]
+
+[sub_resource type="Theme" id="Theme_afkdi"]
 
 [node name="ImageSelectionGui" type="MarginContainer"]
 anchors_preset = 15
@@ -93,3 +95,11 @@ text = "Cancelar
 initial_position = 1
 size = Vector2i(324, 100)
 dialog_text = "Archivo seleccionado no es una imagen!"
+
+[node name="Back" type="Button" parent="."]
+layout_mode = 2
+size_flags_horizontal = 4
+size_flags_vertical = 8
+theme = SubResource("Theme_afkdi")
+theme_override_fonts/font = ExtResource("5_5e7v6")
+text = "Back to Main Menu"

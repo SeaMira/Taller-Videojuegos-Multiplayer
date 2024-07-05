@@ -4,11 +4,17 @@ extends MarginContainer
 @onready var start_game_button:Button = $VBoxContainer/PanelContainer/MarginContainer/VBoxContainer/StartGameButton
 @onready var settings_button = $VBoxContainer/PanelContainer/MarginContainer/VBoxContainer/SettingsButton
 @onready var exit_button = $VBoxContainer/PanelContainer/MarginContainer/VBoxContainer/ExitButton
+@onready var v_box_container = $VBoxContainer
+@onready var settings = $Settings
+@onready var back = $Back
+
 
 
 func _ready():
 	multiplayer.multiplayer_peer.close()
 	Game.players = []
+	settings.visible = false
+	back.visible = false
 	PuzzleSettings.clean_puzzle_settings()
 	GlobalMusic.play_menu_music()
 	
@@ -16,7 +22,7 @@ func _ready():
 	start_game_button.mouse_entered.connect(GlobalMusic.on_button_hover_in)
 	start_game_button.mouse_exited.connect(GlobalMusic.on_button_hover_out)
 	
-	#start_game_button.pressed.connect(self._on_start_game_button_pressed)
+	settings_button.pressed.connect(self._on_settings_button_pressed)
 	settings_button.mouse_entered.connect(GlobalMusic.on_button_hover_in)
 	settings_button.mouse_exited.connect(GlobalMusic.on_button_hover_out)
 	
@@ -24,11 +30,25 @@ func _ready():
 	exit_button.mouse_entered.connect(GlobalMusic.on_button_hover_in)
 	exit_button.mouse_exited.connect(GlobalMusic.on_button_hover_out)
 	
+	back.pressed.connect(self._back_to_main_menu)
+	back.mouse_entered.connect(GlobalMusic.on_button_hover_in)
+	back.mouse_exited.connect(GlobalMusic.on_button_hover_out)
+	
 	
 func _on_start_game_button_pressed():
 	GlobalMusic.on_button_press()
 	get_tree().change_scene_to_file("res://scenes/lobby.tscn")
 
+func _on_settings_button_pressed():
+	settings.visible = true
+	v_box_container.visible = false
+	back.visible = true
+
 func _on_exit_game_button_pressed():
 	GlobalMusic.on_button_press()
 	get_tree().quit()
+
+func _back_to_main_menu():
+	settings.visible = false
+	v_box_container.visible = true
+	back.visible = false

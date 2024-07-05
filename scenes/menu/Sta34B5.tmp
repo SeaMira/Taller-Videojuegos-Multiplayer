@@ -1,15 +1,14 @@
-[gd_scene load_steps=9 format=3 uid="uid://b5t3l4pfu8ux0"]
+[gd_scene load_steps=8 format=3 uid="uid://b5t3l4pfu8ux0"]
 
 [ext_resource type="Script" path="res://scripts/starting_menu/StartingMenu.gd" id="1_jhbnk"]
 [ext_resource type="Texture2D" uid="uid://ckwa2200rm4p7" path="res://assets/menu_background.png" id="1_r086n"]
 [ext_resource type="FontFile" uid="uid://durkid6h8al5f" path="res://assets/fonts/joystix/joystix monospace.otf" id="3_dr05j"]
 [ext_resource type="StyleBox" uid="uid://by13pr7qwxvwc" path="res://resources/PanelsStyle.tres" id="3_thjbm"]
 [ext_resource type="Script" path="res://scripts/Settings.gd" id="5_3hn61"]
-[ext_resource type="Theme" uid="uid://tj0abbu7snmi" path="res://resources/StartingMenu.tres" id="6_j1tmb"]
 
 [sub_resource type="Theme" id="Theme_gfhpx"]
 
-[sub_resource type="Theme" id="Theme_ik8wo"]
+[sub_resource type="Theme" id="Theme_6rsvg"]
 
 [node name="StartingMenu" type="MarginContainer"]
 anchors_preset = 15
@@ -84,9 +83,9 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = -249.5
+offset_left = -220.0
 offset_top = -60.0
-offset_right = 249.5
+offset_right = 220.0
 offset_bottom = 350.0
 grow_horizontal = 2
 grow_vertical = 2
@@ -104,7 +103,7 @@ size_flags_vertical = 4
 [node name="PanelContainer" type="PanelContainer" parent="Settings/MarginContainer/VBoxContainer"]
 layout_mode = 2
 size_flags_vertical = 4
-theme = ExtResource("6_j1tmb")
+theme = SubResource("Theme_6rsvg")
 theme_override_styles/panel = ExtResource("3_thjbm")
 
 [node name="MarginContainer" type="MarginContainer" parent="Settings/MarginContainer/VBoxContainer/PanelContainer"]
@@ -143,9 +142,8 @@ text = "Music Volume"
 [node name="MusicSlider" type="HSlider" parent="Settings/MarginContainer/VBoxContainer/PanelContainer/MarginContainer/VBoxContainer/Music"]
 process_mode = 3
 layout_mode = 2
-max_value = 1.0
-step = 0.1
-tick_count = 11
+min_value = -80.0
+max_value = 0.0
 
 [node name="SFX" type="VBoxContainer" parent="Settings/MarginContainer/VBoxContainer/PanelContainer/MarginContainer/VBoxContainer"]
 layout_mode = 2
@@ -158,9 +156,8 @@ text = "SFX Volume"
 [node name="SFXSlider" type="HSlider" parent="Settings/MarginContainer/VBoxContainer/PanelContainer/MarginContainer/VBoxContainer/SFX"]
 process_mode = 3
 layout_mode = 2
-max_value = 1.0
-step = 0.1
-tick_count = 11
+min_value = -80.0
+max_value = 0.0
 
 [node name="Menu" type="VBoxContainer" parent="Settings/MarginContainer/VBoxContainer/PanelContainer/MarginContainer/VBoxContainer"]
 layout_mode = 2
@@ -173,14 +170,5 @@ text = "Menu Sounds Volume"
 [node name="MenuSlider" type="HSlider" parent="Settings/MarginContainer/VBoxContainer/PanelContainer/MarginContainer/VBoxContainer/Menu"]
 process_mode = 3
 layout_mode = 2
-max_value = 1.0
-step = 0.1
-tick_count = 11
-
-[node name="Back" type="Button" parent="."]
-layout_mode = 2
-size_flags_horizontal = 4
-size_flags_vertical = 4
-theme = SubResource("Theme_ik8wo")
-theme_override_fonts/font = ExtResource("3_dr05j")
-text = "Back"
+min_value = -80.0
+max_value = 0.0

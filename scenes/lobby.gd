@@ -18,6 +18,8 @@ extends MarginContainer
 @onready var back_ready: Button = %BackReady
 @onready var ready_toggle: Button = %Ready
 
+@onready var back = $Back
+
 @onready var menus: MarginContainer = %Menus
 
 @onready var start_menu = %StartMenu
@@ -63,6 +65,8 @@ func _ready():
 	
 	back_join.pressed.connect(_back_menu)
 	back_ready.pressed.connect(_back_menu)
+	
+	back.pressed.connect(_back_to_main_menu)
 	
 	role_a.pressed.connect(func(): Game.set_current_player_role(Statics.Role.BLUE))
 	role_b.pressed.connect(func(): Game.set_current_player_role(Statics.Role.ORANGE))
@@ -302,3 +306,6 @@ func assign_script_to_buttons(node, script):
 		node._ready()
 	for child in node.get_children():
 		assign_script_to_buttons(child, script)
+
+func _back_to_main_menu():
+	get_tree().change_scene_to_file("res://scenes/menu/StartingMenu.tscn")

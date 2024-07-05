@@ -7,6 +7,8 @@ var base_size = Vector2i(960, 540)
 @onready var option_button = $PanelContainer/MarginContainer/VBoxContainer/OptionButton
 @onready var confirm_button = $PanelContainer/MarginContainer/VBoxContainer/ConfirmButton
 @onready var cancel_button = $PanelContainer/MarginContainer/VBoxContainer/CancelButton
+@onready var back = $Back
+
 
 var image_extensions = ["png", "jpg"]
 var IMAGE = null
@@ -47,11 +49,16 @@ func _ready():
 	file_dialog.file_selected.connect(self._file_selected)
 	
 	assign_script_to_buttons(get_tree().root, BUTTON_SCRIPT_PATH)
+	
+	back.pressed.connect(self.get_back_to_menu)
 
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta):
-	pass
-
+func get_back_to_menu():
+	_back_to_main_menu.rpc()
+	
+@rpc("reliable", "any_peer", "call_local")
+func _back_to_main_menu():
+	get_tree().change_scene_to_file("res://scenes/menu/StartingMenu.tscn")
+	
 func _button_pressed():
 	GlobalMusic.on_button_press()
 	file_dialog.visible = !file_dialog.visible
