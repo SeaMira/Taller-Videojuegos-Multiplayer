@@ -7,6 +7,10 @@ extends MarginContainer
 @onready var v_box_container = $VBoxContainer
 @onready var settings = $Settings
 @onready var back = $Back
+@onready var how_to_play = $HowToPlay
+@onready var how_to_play_button = $HowToPlayButton
+@onready var back_2 = $HowToPlay/Back2
+
 
 
 
@@ -15,6 +19,7 @@ func _ready():
 	Game.players = []
 	settings.visible = false
 	back.visible = false
+	how_to_play.visible = false
 	PuzzleSettings.clean_puzzle_settings()
 	GlobalMusic.play_menu_music()
 	
@@ -25,6 +30,13 @@ func _ready():
 	settings_button.pressed.connect(self._on_settings_button_pressed)
 	settings_button.mouse_entered.connect(GlobalMusic.on_button_hover_in)
 	settings_button.mouse_exited.connect(GlobalMusic.on_button_hover_out)
+	
+	how_to_play_button.pressed.connect(self._on_how_to_play_button_pressed)
+	how_to_play_button.mouse_entered.connect(GlobalMusic.on_button_hover_in)
+	how_to_play_button.mouse_exited.connect(GlobalMusic.on_button_hover_out)
+	back_2.pressed.connect(self._back_to_main_menu)
+	back_2.mouse_entered.connect(GlobalMusic.on_button_hover_in)
+	back_2.mouse_exited.connect(GlobalMusic.on_button_hover_out)
 	
 	exit_button.pressed.connect(self._on_exit_game_button_pressed)
 	exit_button.mouse_entered.connect(GlobalMusic.on_button_hover_in)
@@ -44,11 +56,16 @@ func _on_settings_button_pressed():
 	v_box_container.visible = false
 	back.visible = true
 
+func _on_how_to_play_button_pressed():
+	how_to_play.visible = true
+	v_box_container.visible = false
+	
 func _on_exit_game_button_pressed():
 	GlobalMusic.on_button_press()
 	get_tree().quit()
 
 func _back_to_main_menu():
 	settings.visible = false
+	how_to_play.visible = false
 	v_box_container.visible = true
 	back.visible = false

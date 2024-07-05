@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=3 uid="uid://b5t3l4pfu8ux0"]
+[gd_scene load_steps=10 format=3 uid="uid://b5t3l4pfu8ux0"]
 
 [ext_resource type="Script" path="res://scripts/starting_menu/StartingMenu.gd" id="1_jhbnk"]
 [ext_resource type="Texture2D" uid="uid://ckwa2200rm4p7" path="res://assets/menu_background.png" id="1_r086n"]
@@ -6,6 +6,7 @@
 [ext_resource type="StyleBox" uid="uid://by13pr7qwxvwc" path="res://resources/PanelsStyle.tres" id="3_thjbm"]
 [ext_resource type="Script" path="res://scripts/Settings.gd" id="5_3hn61"]
 [ext_resource type="Theme" uid="uid://tj0abbu7snmi" path="res://resources/StartingMenu.tres" id="6_j1tmb"]
+[ext_resource type="Texture2D" uid="uid://caay73mxdrxvi" path="res://assets/how_to_play.png" id="7_va82g"]
 
 [sub_resource type="Theme" id="Theme_gfhpx"]
 
@@ -184,3 +185,39 @@ size_flags_vertical = 4
 theme = SubResource("Theme_ik8wo")
 theme_override_fonts/font = ExtResource("3_dr05j")
 text = "Back"
+
+[node name="HowToPlayButton" type="Button" parent="."]
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 8
+theme = SubResource("Theme_ik8wo")
+theme_override_fonts/font = ExtResource("3_dr05j")
+text = "How To Play"
+
+[node name="Credits" type="Button" parent="."]
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 4
+theme = SubResource("Theme_ik8wo")
+theme_override_fonts/font = ExtResource("3_dr05j")
+text = "Credits"
+
+[node name="HowToPlay" type="Control" parent="."]
+layout_mode = 2
+
+[node name="Sprite2D" type="Sprite2D" parent="HowToPlay"]
+position = Vector2(360, 191)
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("7_va82g")
+
+[node name="Back2" type="Button" parent="HowToPlay"]
+layout_mode = 2
+offset_left = 530.0
+offset_top = 309.0
+offset_right = 775.0
+offset_bottom = 337.0
+size_flags_horizontal = 4
+size_flags_vertical = 4
+theme = SubResource("Theme_ik8wo")
+theme_override_fonts/font = ExtResource("3_dr05j")
+text = "back to main menu"
