@@ -276,7 +276,10 @@ text = "					    Development:
 
 					Inventory Boxes:
 			 Roupiks - https://roupiks.itch.io/
-"
+
+					Special thanks to:
+				Teachers at CC5409-1 course
+			Autumn 2024 - Universidad de Chile"
 
 [node name="Back" type="Button" parent="Credits"]
 layout_mode = 0
